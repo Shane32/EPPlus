@@ -259,3 +259,8 @@ Release Candidate changes
 
 ## License
 The project is licensed under the GNU Library General Public License (LGPL). 
+
+## Credits
+
+Glory to Jehovah, Lord of Lords and King of Kings, creator of Heaven and Earth, who through his Son Jesus Christ,
+has reedemed me to become a child of God. -Shane32
