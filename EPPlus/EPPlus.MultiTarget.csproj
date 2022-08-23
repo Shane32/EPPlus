@@ -36,6 +36,7 @@
     <NeutralLanguage />
     <PackageLicenseFile>lgpl-3.0.txt</PackageLicenseFile>
 	<NoWarn>$(NoWarn);CS1591;CS1572</NoWarn>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
  
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'netstandard2.0'">
@@ -80,9 +81,7 @@
     <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="readme.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="README.md" Pack="true" PackagePath="" />
     <None Include="lgpl-3.0.txt" Pack="true" Visible="false" PackagePath="" />
 	<None Include="icon.jpg" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>

@@ -1,16 +1,15 @@
-# Continuous Version of EPPlus Free Edition 4.5.3.3
-# EPPlus Free Edition
-# Continuous Version of EPPlus Free Edition 4.5.3.3
-# LGPL License continue
-		
-# Note: 4.5.3.3 is the last official version of EPPlus under the LGPL License, now it has been archived.
+# EPPlus-LGPL
+	
+EPPlus-LGPL is an unofficial EPPlus library which includes bug fixes beyond EPPlus 4.5.3.3
 
-## Official Announcement: This is the last version of EPPlus under the LGPL License
+## Note: 4.5.3.3 is the last official version of EPPlus under the LGPL License; now it has been archived.
+
 EPPlus will from version 5 be licensed under the [Polyform Noncommercial 1.0.0]( https://polyformproject.org/licenses/noncommercial/1.0.0/) license.  
 With the new license EPPlus is still free to use in some cases, but will require a commercial license to be used in a commercial business.  
 More information on the license change on [our website]( https://www.epplussoftware.com/Home/LgplToPolyform)
 
-New features in version 4.5:
+## New features in version 4.5
+
 * .NET Core support
 * Sparklines
 * Sort method added to ExcelRange
@@ -35,13 +34,16 @@ apt-get install libgdiplus
 
 EPPlus-A .NET Spreadsheet API
 
-Changes
+## Changes
+
+4.5.3.9
+* Fixed recalculation under .NET Framework
+
 4.5.3.8
 * Fixed the bug of address of ExcelNamedRange in ExcelNamedRangeCollection and Cell of ExcelSparkline in ExcelNamedRangeCollection when inserting row or column in ExcelWorksheet.
 
 4.5.3.7
 * Modify ExcelSparkline to support named data range.
-----------------------------------------------------
 
 4.5.3.3
 * Support for .NET Standard 2.1.

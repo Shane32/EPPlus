@@ -34,10 +34,12 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
       - name: Build solution [Release]
+        shell: bash
         run: dotnet build --no-restore -c Release -p:Version=$version
       - name: Pack solution [Release]
+        shell: bash
         run: dotnet pack --no-restore --no-build -c Release -p:Version=$version -o out
-      - name: Upload artifacts
+      - name: Upload workflow build artifacts
         uses: actions/upload-artifact@v2
         with:
           name: Nuget packages
@@ -59,6 +61,11 @@ jobs:
       - name: Zip documentation
         working-directory: Doc/Help
         run: zip -r ../../out/Documentation.zip .
+      - name: Upload workflow documentation artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Documentation
+          path: Doc/Help
       - name: Upload Nuget packages and documentation as release artifacts
         uses: actions/github-script@v6
         with:
