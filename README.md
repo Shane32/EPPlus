@@ -1,16 +1,17 @@
 # EPPlus-LGPL
-	
+
+[![Nuget](https://img.shields.io/nuget/v/EPPlus-LGPL)](https://www.nuget.org/packages/EPPlus-LGPL)
+
 EPPlus-LGPL is an unofficial EPPlus library which includes bug fixes beyond EPPlus 4.5.3.3 while retaining a LGPL license.
 
-> Note: 4.5.3.3 is the last official version of EPPlus under the LGPL License; now it has been archived.
-
-EPPlus will from version 5 be licensed under the [Polyform Noncommercial 1.0.0]( https://polyformproject.org/licenses/noncommercial/1.0.0/) license.  
-With the new license EPPlus is still free to use in some cases, but will require a commercial license to be used in a commercial business.  
-More information on the license change on [our website]( https://www.epplussoftware.com/Home/LgplToPolyform)
+:warning: 4.5.3.3 is the last official version of EPPlus under the LGPL License; now it has been archived.
+EPPlus will from version 5 be licensed under the [Polyform Noncommercial 1.0.0]( https://polyformproject.org/licenses/noncommercial/1.0.0/) license.
+With the new license EPPlus is still free to use in some cases, but will require a commercial license to be used in a commercial business.
+More information on the license change on [their website](https://www.epplussoftware.com/Home/LgplToPolyform).
 
 ***
 
-Create advanced Excel spreadsheets using .NET, without the need of interop.
+## Create advanced Excel spreadsheets using .NET, without the need of interop.
 
 EPPlus is a .NET library that reads and writes Excel files using the Office Open XML format (xlsx). 
 EPPlus has no dependencies other than .NET.
