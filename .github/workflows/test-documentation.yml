@@ -28,6 +28,7 @@ jobs:
       - name: Build documentation
         working-directory: Doc
         run: msbuild EPPlusDoc.sln -t:rebuild -verbosity:minimal -property:Configuration=Release
+
 #      - name: Upload build artifacts
 #        uses: actions/upload-artifact@v3
 #        with:
