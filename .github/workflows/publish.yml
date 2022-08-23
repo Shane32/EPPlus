@@ -17,6 +17,7 @@ jobs:
           echo github.ref: ${{ github.ref }}
           exit 1
       - name: Set version number environment variable
+        shell: bash
         env:
           github_ref: ${{ github.ref }}
         run: |
