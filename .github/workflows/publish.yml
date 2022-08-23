@@ -46,7 +46,7 @@ jobs:
           path: |
             out/*
       - name: Publish Nuget packages to NuGet registry
-        run: dotnet nuget push "out/*" -k ${{secrets.NUGET_AUTH_TOKEN}}
+        run: dotnet nuget push "out\*" -k ${{secrets.NUGET_AUTH_TOKEN}}
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
         with:
