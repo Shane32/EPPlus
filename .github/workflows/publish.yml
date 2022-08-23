@@ -28,9 +28,9 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '6.0.x'
-#          source-url: https://api.nuget.org/v3/index.json
-#        env:
-#          NUGET_AUTH_TOKEN: ${{secrets.NUGET_AUTH_TOKEN}}
+          source-url: https://api.nuget.org/v3/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.NUGET_AUTH_TOKEN}}
       - name: Install dependencies
         run: dotnet restore
       - name: Build solution [Release]
@@ -45,8 +45,8 @@ jobs:
           name: Nuget packages
           path: |
             out/*
-#      - name: Publish Nuget packages to NuGet registry
-#        run: dotnet nuget push "out/*" -k ${{secrets.NUGET_AUTH_TOKEN}}
+      - name: Publish Nuget packages to NuGet registry
+        run: dotnet nuget push "out/*" -k ${{secrets.NUGET_AUTH_TOKEN}}
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
         with:
