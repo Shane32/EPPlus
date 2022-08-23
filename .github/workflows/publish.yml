@@ -59,9 +59,9 @@ jobs:
         working-directory: Doc
         run: msbuild EPPlusDoc.sln -t:rebuild -verbosity:minimal -property:Configuration=Release
       - name: Zip documentation
-        shell: bash
         working-directory: Doc/Help
-        run: zip -r ../../out/Documentation.zip .
+        run: Compress-Archive -Path * -DestinationPath ..\..\out\Documentation.zip
+#        run: zip -r ../../out/Documentation.zip .
       - name: Upload workflow documentation artifacts
         uses: actions/upload-artifact@v3
         with:
