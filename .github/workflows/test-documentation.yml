@@ -20,7 +20,7 @@ jobs:
         with:
           msbuild-architecture: x64
       - name: Install SHFB
-        uses: Shane32/setup-SHFB@main
+        uses: Shane32/setup-SHFB@ffe9d55917ef7f63203c35528d53844409a1a502
         with:
           version: 2022.8.14.1
       - name: Build project
