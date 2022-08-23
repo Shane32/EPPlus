@@ -81,7 +81,7 @@
     <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="" />
+    <None Include="../README.md" Pack="true" PackagePath="" />
     <None Include="lgpl-3.0.txt" Pack="true" Visible="false" PackagePath="" />
 	<None Include="icon.jpg" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>
