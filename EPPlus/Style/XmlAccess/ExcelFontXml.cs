@@ -269,6 +269,9 @@ namespace OfficeOpenXml.Style.XmlAccess
                 _verticalAlign=value;
             }
         }
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public void SetFromFont(System.Drawing.Font Font)
         {
             Name=Font.Name;

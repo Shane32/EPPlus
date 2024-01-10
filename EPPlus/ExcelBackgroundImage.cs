@@ -66,6 +66,9 @@ namespace OfficeOpenXml
         /// The background image of the worksheet. 
         /// The image will be saved internally as a jpg.
         /// </summary>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public Image Image
         {
             get
@@ -105,6 +108,9 @@ namespace OfficeOpenXml
         /// The image file will be saved as a blob, so make sure Excel supports the image format.
         /// </summary>
         /// <param name="PictureFile">The image file.</param>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public void SetFromFile(FileInfo PictureFile)
         {
             DeletePrevImage();
@@ -142,6 +148,9 @@ namespace OfficeOpenXml
             var rel = _workSheet.Part.CreateRelationship(imageURI, Packaging.TargetMode.Internal, ExcelPackage.schemaRelationships + "/image");
             SetXmlNodeString(BACKGROUNDPIC_PATH, rel.Id);
         }
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         private void DeletePrevImage()
         {
             var relID = GetXmlNodeString(BACKGROUNDPIC_PATH);

@@ -771,6 +771,9 @@ namespace OfficeOpenXml
         /// Note: Cells containing formulas must be calculated before autofit is called.
         /// Wrapped and merged cells are also ignored.
         /// </summary>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public void AutoFitColumns()
         {
             AutoFitColumns(_worksheet.DefaultColWidth);
@@ -783,6 +786,9 @@ namespace OfficeOpenXml
         /// </summary>
         /// <remarks>This method will not work if you run in an environment that does not support GDI</remarks>
         /// <param name="MinimumWidth">Minimum column width</param>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public void AutoFitColumns(double MinimumWidth)
         {
             AutoFitColumns(MinimumWidth, double.MaxValue);
@@ -796,6 +802,9 @@ namespace OfficeOpenXml
         /// </summary>
         /// <param name="MinimumWidth">Minimum column width</param>
         /// <param name="MaximumWidth">Maximum column width</param>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public void AutoFitColumns(double MinimumWidth, double MaximumWidth)
         {
             if (_worksheet.Dimension == null)

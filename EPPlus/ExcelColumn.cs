@@ -274,6 +274,9 @@ namespace OfficeOpenXml
         /// Note: Cells containing formulas are ignored since EPPlus don't have a calculation engine.
         ///       Wrapped and merged cells are also ignored.
         /// </summary>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public void AutoFit()
         {
             _worksheet.Cells[1, _columnMin, ExcelPackage.MaxRows, _columnMax].AutoFitColumns();
@@ -285,6 +288,9 @@ namespace OfficeOpenXml
         ///       Wrapped and merged cells are also ignored.
         /// </summary>
         /// <param name="MinimumWidth">Minimum column width</param>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public void AutoFit(double MinimumWidth)
         {
             _worksheet.Cells[1, _columnMin, ExcelPackage.MaxRows, _columnMax].AutoFitColumns(MinimumWidth);
@@ -297,6 +303,9 @@ namespace OfficeOpenXml
         /// </summary>
         /// <param name="MinimumWidth">Minimum column width</param>
         /// <param name="MaximumWidth">Maximum column width</param>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public void AutoFit(double MinimumWidth, double MaximumWidth)
         {
             _worksheet.Cells[1, _columnMin, ExcelPackage.MaxRows, _columnMax].AutoFitColumns(MinimumWidth, MaximumWidth);

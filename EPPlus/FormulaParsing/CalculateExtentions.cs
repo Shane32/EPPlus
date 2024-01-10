@@ -157,7 +157,7 @@ namespace OfficeOpenXml
                 }
                 catch (FormatException fe)
                 {
-                    throw (fe);
+                    throw;
                 }
                 catch
                 {

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;netstandard2.0;netcoreapp3.1;net35;net40</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;netstandard2.0;netcoreapp3.1;net35;net40;net6.0;net8.0</TargetFrameworks>
     <VersionPrefix>4.5.4-preview</VersionPrefix>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<PackageIcon>icon.jpg</PackageIcon>
@@ -37,9 +37,10 @@
     <PackageLicenseFile>lgpl-3.0.txt</PackageLicenseFile>
 	<NoWarn>$(NoWarn);CS1591;CS1572</NoWarn>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
+	<WarningsAsErrors>CA1416</WarningsAsErrors>
   </PropertyGroup>
  
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'netcoreapp3.1' OR '$(TargetFramework)' == 'net6.0'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'netcoreapp3.1' OR '$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'net8.0'">
     <DefineConstants>Core</DefineConstants>
   </PropertyGroup>
 
@@ -77,6 +78,16 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.32" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.3" />
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="4.7.0" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="6.0.4" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.1" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
     <None Include="../README.md" Pack="true" PackagePath="" />

@@ -133,6 +133,9 @@ namespace OfficeOpenXml.Drawing.Vml
         /// <summary>
         /// The image
         /// </summary>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public Image Image
         {
             get

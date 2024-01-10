@@ -8,6 +8,9 @@ using System.Text;
 
 namespace OfficeOpenXml.Compatibility
 {
+#if NET6_0_OR_GREATER
+    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
     internal class ImageCompat
     {
         internal static byte[] GetImageAsByteArray(Image image)

@@ -122,6 +122,9 @@ namespace OfficeOpenXml
         /// </summary>
         /// <param name="Picture">The image object containing the Picture</param>
         /// <param name="Alignment">Alignment. The image object will be inserted at the end of the Text.</param>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public ExcelVmlDrawingPicture InsertPicture(Image Picture, PictureAlignment Alignment)
         {
             string id = ValidateImage(Alignment);
@@ -144,6 +147,9 @@ namespace OfficeOpenXml
         /// </summary>
         /// <param name="PictureFile">The image object containing the Picture</param>
         /// <param name="Alignment">Alignment. The image object will be inserted at the end of the Text.</param>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public ExcelVmlDrawingPicture InsertPicture(FileInfo PictureFile, PictureAlignment Alignment)
         {
             string id = ValidateImage(Alignment);
@@ -176,6 +182,9 @@ namespace OfficeOpenXml
             return AddImage(Picture, id, ii);
         }
 
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         private ExcelVmlDrawingPicture AddImage(Image Picture, string id, ExcelPackage.ImageInfo ii)
         {
             double width = Picture.Width * 72 / Picture.HorizontalResolution,      //Pixel --> Points

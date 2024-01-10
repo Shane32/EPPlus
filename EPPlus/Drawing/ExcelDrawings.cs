@@ -304,6 +304,9 @@ namespace OfficeOpenXml.Drawing
             /// <param name="Name"></param>
             /// <param name="image">An image. Allways saved in then JPeg format</param>
             /// <returns></returns>
+#if NET6_0_OR_GREATER
+            [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
             public ExcelPicture AddPicture(string Name, Image image)
             {
                return AddPicture(Name, image, null);
@@ -315,6 +318,9 @@ namespace OfficeOpenXml.Drawing
             /// <param name="image">An image. Allways saved in then JPeg format</param>
             /// <param name="Hyperlink">Picture Hyperlink</param>
             /// <returns></returns>
+#if NET6_0_OR_GREATER
+            [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
             public ExcelPicture AddPicture(string Name, Image image, Uri Hyperlink)
             {
                 if (image != null)
@@ -339,6 +345,9 @@ namespace OfficeOpenXml.Drawing
             /// <param name="Name"></param>
             /// <param name="ImageFile">The image file</param>
             /// <returns></returns>
+#if NET6_0_OR_GREATER
+            [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
             public ExcelPicture AddPicture(string Name, FileInfo ImageFile)
             {
                return AddPicture(Name, ImageFile, null);
@@ -350,6 +359,9 @@ namespace OfficeOpenXml.Drawing
             /// <param name="ImageFile">The image file</param>
             /// <param name="Hyperlink">Picture Hyperlink</param>
             /// <returns></returns>
+#if NET6_0_OR_GREATER
+            [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
             public ExcelPicture AddPicture(string Name, FileInfo ImageFile, Uri Hyperlink)
             {
                 if (Worksheet is ExcelChartsheet && _drawings.Count > 0)

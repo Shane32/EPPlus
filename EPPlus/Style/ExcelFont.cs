@@ -213,6 +213,9 @@ namespace OfficeOpenXml.Style
         /// Set the font from a Font object
         /// </summary>
         /// <param name="Font"></param>
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         public void SetFromFont(Font Font)
         {
             Name = Font.Name;

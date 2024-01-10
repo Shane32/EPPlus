@@ -249,7 +249,9 @@ namespace OfficeOpenXml
                 //CopyRelationShips(Copy, added);
                 if (Copy.Drawings.Count > 0)
                 {
+#pragma warning disable CA1416 // Validate platform compatibility
                     CopyDrawing(Copy, added);
+#pragma warning restore CA1416 // Validate platform compatibility
                 }
                 if (Copy.Tables.Count > 0)
                 {
@@ -661,6 +663,9 @@ namespace OfficeOpenXml
 
             e.SetAttribute("id", ExcelPackage.schemaRelationships, newVmlRel.Id);
         }
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
         private void CopyDrawing(ExcelWorksheet Copy, ExcelWorksheet workSheet/*, PackageRelationship r*/)
         {
             

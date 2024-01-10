@@ -46,6 +46,9 @@ namespace OfficeOpenXml.Drawing
     /// <summary>
     /// An image object
     /// </summary>
+#if NET6_0_OR_GREATER
+    [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
     public sealed class ExcelPicture : ExcelDrawing
     {
         #region "Constructors"
