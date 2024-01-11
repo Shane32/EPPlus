@@ -87,7 +87,7 @@ namespace EPPlusTest
             pic = ws.Drawings.AddPicture("Pic5", new FileInfo(Path.Combine(_clipartPath,"BitmapImage.gif")));
             pic.SetPosition(400, 200);
             pic.SetSize(150);
-
+            Console.WriteLine($"Columns: {ws.Dimension.Columns} Rows: {ws.Dimension.Rows}");
             ws.Column(1).Width = 53;
             ws.Column(4).Width = 58;
 
