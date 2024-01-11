@@ -249,9 +249,7 @@ namespace OfficeOpenXml
                 //CopyRelationShips(Copy, added);
                 if (Copy.Drawings.Count > 0)
                 {
-#pragma warning disable CA1416 // Validate platform compatibility
                     CopyDrawing(Copy, added);
-#pragma warning restore CA1416 // Validate platform compatibility
                 }
                 if (Copy.Tables.Count > 0)
                 {
@@ -663,9 +661,6 @@ namespace OfficeOpenXml
 
             e.SetAttribute("id", ExcelPackage.schemaRelationships, newVmlRel.Id);
         }
-#if NET6_0_OR_GREATER
-        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-#endif
         private void CopyDrawing(ExcelWorksheet Copy, ExcelWorksheet workSheet/*, PackageRelationship r*/)
         {
             
@@ -711,7 +706,7 @@ namespace OfficeOpenXml
                         if(!workSheet.Workbook._package.Package.PartExists(uri))
                         {
                             var picPart = workSheet.Workbook._package.Package.CreatePart(uri, pic.ContentType, CompressionLevel.None);
-                            pic.Image.Save(picPart.GetStream(FileMode.Create, FileAccess.Write), ExcelPicture.GetImageFormat(pic.ContentType));
+                            pic.SaveImageTo(picPart.GetStream(FileMode.Create, FileAccess.Write));
                         }
                         
                         var rel = part.CreateRelationship(UriHelper.GetRelativeUri(workSheet.WorksheetUri, uri), Packaging.TargetMode.Internal, ExcelPackage.schemaRelationships + "/image");

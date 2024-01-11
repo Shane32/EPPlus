@@ -349,9 +349,7 @@ namespace OfficeOpenXml.Drawing
             //}
             else if (node.SelectSingleNode("xdr:pic", drawings.NameSpaceManager) != null)
             {
-#pragma warning disable CA1416 // Validate platform compatibility
                 return new ExcelPicture(drawings, node);
-#pragma warning restore CA1416 // Validate platform compatibility
             }
             else if (node.SelectSingleNode("xdr:graphicFrame", drawings.NameSpaceManager) != null)
             {
