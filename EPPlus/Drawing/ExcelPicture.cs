@@ -64,9 +64,9 @@ namespace OfficeOpenXml.Drawing
                 Part = drawings.Part.Package.GetPart(UriPic);
                 FileInfo f = new FileInfo(UriPic.OriginalString);
                 ContentType = GetContentType(f.Extension);
-                _image = Image.FromStream(Part.GetStream());
-
-                var iby = ImageToByteArray(_image);
+                var iby = Part.GetStream().ToArray();
+                var ms = new MemoryStream(iby);
+                _image = Image.FromStream(ms);
                 var ii = _drawings._package.LoadImage(iby, UriPic, Part);
                 ImageHash = ii.Hash;
 
