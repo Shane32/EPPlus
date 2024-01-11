@@ -11,7 +11,7 @@ namespace EPPlusTest
     [TestClass]
     public class DTS_FailingTests
     {
-
+#if !NoDrawing
         [TestMethod]
         public void DeleteWorksheetWithReferencedImage()
         {
@@ -45,5 +45,6 @@ namespace EPPlusTest
                 pck.Save();
             }
         }
+#endif
     }
 }

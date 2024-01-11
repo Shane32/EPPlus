@@ -48,7 +48,9 @@ namespace EPPlusTest
             RichTextCells();
             TestComments();
             Hyperlink();
+#if !NoDrawing
             PictureURL();
+#endif
             CopyOverwrite();
             HideTest();
             VeryHideTest();
@@ -65,7 +67,9 @@ namespace EPPlusTest
             WorksheetCopy();
             DefaultColWidth();
             CopyTable();
+#if !NoDrawing
             AutoFitColumns();
+#endif
             CopyRange();
             CopyMergedRange();
             ValueError();
@@ -77,7 +81,9 @@ namespace EPPlusTest
             DefinedName();
             CreatePivotTable();
             AddChartSheet();
+#if !NoDrawing
             SetHeaderFooterImage();
+#endif
 
             SaveWorksheet("Worksheet.xlsx");
 
@@ -344,6 +350,7 @@ namespace EPPlusTest
             instream.Close();
         }
 
+#if !NoDrawing
         [Ignore]
         [TestMethod]
         public void ReadStreamWithTemplateWorkSheet()
@@ -379,6 +386,7 @@ namespace EPPlusTest
             }
             instream.Close();
         }
+#endif
         //[Ignore]
         //[TestMethod]
         public void ReadStreamSaveAsStream()
@@ -466,8 +474,10 @@ namespace EPPlusTest
 
             // add autofilter
             ws.Cells["U19:X24"].AutoFilter = true;
+#if !NoDrawing
             ExcelPicture pic = ws.Drawings.AddPicture("Pic1", Properties.Resources.Test1);
             pic.SetPosition(150, 140);
+#endif
 
             ws.Cells["A30"].Value = "Text orientation 45";
             ws.Cells["A30"].Style.TextRotation = 45;
@@ -1131,6 +1141,7 @@ namespace EPPlusTest
             ws.Cells["E2:E5"].CreateArrayFormula("FREQUENCY(B2:B18,C2:C5)");
             _pck.SaveAs(new FileInfo("c:\\temp\\arrayformula.xlsx"));
         }
+#if !NoDrawing
         //[Ignore]
         //[TestMethod]
         public void PictureURL()
@@ -1142,6 +1153,7 @@ namespace EPPlusTest
 
             ws.Drawings.AddPicture("Pic URI", Properties.Resources.Test1, hl);
         }
+#endif
         [TestMethod]
         public void PivotTableTest()
         {
@@ -1894,7 +1906,10 @@ namespace EPPlusTest
             using (ExcelRange r = ws.Cells["A1:F1"])
             {
                 r.Merge = true;
-                r.Style.Font.SetFromFont(new Font("Arial", 18, FontStyle.Italic));
+                //r.Style.Font.SetFromFont(new Font("Arial", 18, FontStyle.Italic));
+                r.Style.Font.Name = "Arial";
+                r.Style.Font.Size = 18;
+                r.Style.Font.Italic = true;
                 r.Style.Font.Color.SetColor(Color.DarkRed);
                 r.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.CenterContinuous;
                 //r.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
@@ -2254,6 +2269,7 @@ namespace EPPlusTest
 
             pck.Save();
         }
+#if !NoDrawing
         //[Ignore]
         [TestMethod]
         public void SetBackground()
@@ -2296,6 +2312,7 @@ namespace EPPlusTest
 
             _pck.Workbook.Worksheets.Copy(ws.Name, "Copied HeaderImage");
         }
+#endif
         //[Ignore]
         //[TestMethod]
         public void NamedStyles()
@@ -2313,8 +2330,10 @@ namespace EPPlusTest
             s.VerticalAlignment = ExcelVerticalAlignment.Center;
 
             var secondNamedStyle = _pck.Workbook.Styles.CreateNamedStyle("first", firstNamedStyle.Style).Style;
+            //secondNamedStyle.Font.SetFromFont(new Font("Arial Black", 8));
+            secondNamedStyle.Font.Name = "Arial Black";
+            secondNamedStyle.Font.Size = 8;
             secondNamedStyle.Font.Bold = true;
-            secondNamedStyle.Font.SetFromFont(new Font("Arial Black", 8));
             secondNamedStyle.Border.Bottom.Style = ExcelBorderStyle.Medium;
             secondNamedStyle.Border.Left.Style = ExcelBorderStyle.Medium;
 
@@ -2415,6 +2434,7 @@ namespace EPPlusTest
             //  n.CustomBuildin = true;
             pck.SaveAs(new FileInfo(@"c:\temp\style.xlsx"));
         }
+#if !NoDrawing
         //[Ignore]
         //[TestMethod]
         public void AutoFitColumns()
@@ -2432,6 +2452,7 @@ namespace EPPlusTest
 
             ws.Column(40).AutoFit();
         }
+#endif
         [TestMethod, Ignore]
         public void Moveissue()
         {
@@ -2903,6 +2924,7 @@ namespace EPPlusTest
             excelPackage.Save();
             var s = stream.ToArray();
         }
+#if !NoDrawing
         [TestMethod, Ignore]
         public void ColumnsTest()
         {
@@ -2925,6 +2947,7 @@ namespace EPPlusTest
             ws.Column(26).ColumnMax = ExcelPackage.MaxColumns;
             excelPackage.SaveAs(new FileInfo(@"c:\temp\autofit.xlsx"));
         }
+#endif
 
         [TestMethod]
         public void Comment()

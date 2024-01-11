@@ -13,10 +13,18 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' != 'true'">
-    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1;net6.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1;net6.0;net8.0</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">
-    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1;net6.0-windows;net462;net48;net8.0-windows</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1;net6.0;net8.0;net462;net48</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'"><!-- enable System.Drawing.Common on .NET 6 -->
+    <RuntimeHostConfigurationOption Include="System.Drawing.EnableUnixSupport" Value="true" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0' AND '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' != 'true'">
+    <DefineConstants>NoDrawing</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -48,9 +56,5 @@
 
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <RuntimeHostConfigurationOption Include="System.Drawing.EnableUnixSupport" Value="true" />
   </ItemGroup>
 </Project>

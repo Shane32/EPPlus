@@ -13,6 +13,7 @@ using System.Reflection;
 
 namespace EPPlusTest
 {
+#if !NoDrawing
     /// <summary>
     /// Summary description for UnitTest1
     /// </summary>
@@ -966,4 +967,5 @@ namespace EPPlusTest
             //}
         }
     }
+#endif
 }

@@ -80,6 +80,7 @@ namespace EPPlusTest
                 ws.Dispose();
             }
         }
+#if !NoDrawing
         [TestMethod]
         public void Issue15022()
         {
@@ -91,6 +92,7 @@ namespace EPPlusTest
                 ws.Cells.AutoFitColumns();
             }
         }
+#endif
         [TestMethod]
         public void Issue15056()
         {
@@ -307,7 +309,9 @@ namespace EPPlusTest
                 ws.Cells["D2:D3"].Style.Numberformat.Format = "(* #,##0.00);_(* (#,##0.00);_(* \"-\"??_);(@)";
 
                 ws.Cells["E2:E3"].Style.Numberformat.Format = "mm/dd/yyyy";
+#if !NoDrawing
                 ws.Cells.AutoFitColumns();
+#endif
                 Assert.AreNotEqual(ws.Cells[2, 5].Text, "");
             }
         }
@@ -465,6 +469,7 @@ namespace EPPlusTest
                 package.SaveAs(new FileInfo(@"C:\temp\bug\MyTemplate2.xlsx"));
             }
         }
+#if !NoDrawing
         [Ignore]
         [TestMethod]
         public void PictureIssue()
@@ -474,6 +479,7 @@ namespace EPPlusTest
             ws.Drawings.AddPicture("Test", new FileInfo(@"c:\temp\bug\2152228.jpg"));
             p.SaveAs(new FileInfo(@"c:\temp\bug\pic.xlsx"));
         }
+#endif
 
         [Ignore]
         [TestMethod]
@@ -839,7 +845,9 @@ namespace EPPlusTest
                     range.Style.Numberformat.Format = "mm-dd-yy";
                 }
 
+#if !NoDrawing
                 wsData.Cells.AutoFitColumns(0);
+#endif
                 EP.Save();
             }
         }
@@ -1636,7 +1644,9 @@ namespace EPPlusTest
                 ws.Cells["E1"].Value = "Cell value 5";
             }
             //ws.Cells.Style.VerticalAlignment = ExcelVerticalAlignment::Top; // Columns 4 and greater hidden
+#if !NoDrawing
             ws.Cells.AutoFitColumns(0);
+#endif
             ws.Cells.Style.VerticalAlignment = ExcelVerticalAlignment.Top; // 4.1.1.0 - exception, 4.0.4.0 - columns 4 and 5 hidden
             ws.Column(4).Hidden = true;
             ws.Column(5).Hidden = true; // span exception
@@ -1906,6 +1916,7 @@ namespace EPPlusTest
             }
         }
 
+#if !NoDrawing
         [TestMethod, Ignore]
         public void Issue100()
         {
@@ -1922,6 +1933,8 @@ namespace EPPlusTest
                 package.SaveAs(outputFile);
             }
         }
+#endif
+
         [TestMethod, Ignore]
         public void Issue99()
         {
@@ -2042,6 +2055,7 @@ namespace EPPlusTest
                 pck.SaveAs(new FileInfo($@"C:\temp\bug\issue181-saved.xlsx"));
             }
         }
+#if !NoDrawing
         [TestMethod, Ignore]
         public void Issue10()
         {
@@ -2064,6 +2078,7 @@ namespace EPPlusTest
                 pck.Save();
             }
         }
+#endif
         /// <summary>
         /// Creating a new ExcelPackage with an external stream should not dispose of 
         /// that external stream. That is the responsibility of the caller.
@@ -2247,7 +2262,9 @@ namespace EPPlusTest
             var ws = _pck.Workbook.Worksheets["Sheet1"];
             var d = ws.Drawings.AddShape("Shape1", eShapeStyle.Diamond);
             ws.Cells["A1"].Value = "tasetraser";
+#if !NoDrawing
             ws.Cells.AutoFitColumns();
+#endif
             SaveWorksheet("Font55-Saved.xlsx");
         }
         [TestMethod]
@@ -2428,6 +2445,7 @@ namespace EPPlusTest
                 Assert.AreEqual(new DateTime(2019, 3, 7).ToShortDateString(), ws.Cells["A1"].Text);
             }
         }
+#if !NoDrawing
         [TestMethod]
         public void Issue445()
         {
@@ -2436,6 +2454,7 @@ namespace EPPlusTest
             ws.Cells[1, 1].Value = new string('a', 50000);
             ws.Cells[1, 1].AutoFitColumns();
         }
+#endif
         [TestMethod]
         public void Issue460()
         {
