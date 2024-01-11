@@ -66,12 +66,7 @@ namespace OfficeOpenXml.Drawing
                 ContentType = GetContentType(f.Extension);
                 _image = Image.FromStream(Part.GetStream());
 
-#if (Core)
-                byte[] iby = ImageCompat.GetImageAsByteArray(_image);
-#else
-                ImageConverter ic =new ImageConverter();
-                var iby=(byte[])ic.ConvertTo(_image, typeof(byte[]));
-#endif
+                var iby = ImageToByteArray(_image);
                 var ii = _drawings._package.LoadImage(iby, UriPic, Part);
                 ImageHash = ii.Hash;
 
@@ -131,12 +126,7 @@ namespace OfficeOpenXml.Drawing
             var imagestream = new FileStream(imageFile.FullName, FileMode.Open, FileAccess.Read);
             _image = Image.FromStream(imagestream);
 
-#if (Core)
-            var img=ImageCompat.GetImageAsByteArray(_image);
-#else
-            ImageConverter ic = new ImageConverter();
-            var img = (byte[])ic.ConvertTo(_image, typeof(byte[]));
-#endif
+            var img = ImageToByteArray(_image);
 
             imagestream.Close();
             UriPic = GetNewUri(package, "/xl/media/{0}" + imageFile.Name);
@@ -229,7 +219,10 @@ namespace OfficeOpenXml.Drawing
             //_drawings._pics.Add(newPic);
         }
         #endregion
-        private string SavePicture(Image image)
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
+        private byte[] ImageToByteArray(Image image)
         {
 #if (Core)
             byte[] img = ImageCompat.GetImageAsByteArray(image);
@@ -237,6 +230,14 @@ namespace OfficeOpenXml.Drawing
             ImageConverter ic = new ImageConverter();
             byte[] img = (byte[])ic.ConvertTo(image, typeof(byte[]));
 #endif
+            return img;
+        }
+#if NET6_0_OR_GREATER
+        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
+#endif
+        private string SavePicture(Image image)
+        {
+            var img = ImageToByteArray(image);
             var ii = _drawings._package.AddImage(img);
             
 
