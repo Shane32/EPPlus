@@ -54,7 +54,6 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' != 'netcoreapp2.1'">
-    <PackageReference Include="Microsoft.NETCore.App" Version="2.1.*" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.0.*" />
     <PackageReference Include="MSTest.TestFramework" Version="3.0.*" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.*" />
