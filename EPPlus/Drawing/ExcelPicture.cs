@@ -330,8 +330,8 @@ namespace OfficeOpenXml.Drawing
         }
 
         internal string ImageHash { get; set; }
-        MemoryStream __imageStream = null;
-        MemoryStream _imageStream
+        private MemoryStream __imageStream = null;
+        private MemoryStream _imageStream
         {
             get
             {
@@ -346,7 +346,7 @@ namespace OfficeOpenXml.Drawing
                 _image = null;
             }
         }
-        Image _image = null;
+        private Image _image = null;
         /// <summary>
         /// The Image
         /// </summary>
@@ -368,7 +368,9 @@ namespace OfficeOpenXml.Drawing
             {
                 if (value != null)
                 {
-                    _imageStream = new MemoryStream(ImageToByteArray(value));
+                    _image?.Dispose();
+                    _image = null;
+                    __imageStream = new MemoryStream(ImageToByteArray(value));
                     try
                     {
                         string relID = SavePicture(value);
