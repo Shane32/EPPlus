@@ -10,14 +10,17 @@
     <Version>4.5.0.0</Version>    
     <Description>Package Description</Description>
 	<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+	  <TargetFrameworks>net6.0</TargetFrameworks>
   </PropertyGroup>
 
+	<!--
   <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' != 'true'">
     <TargetFrameworks>netcoreapp2.1;netcoreapp3.1;net6.0;net8.0</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">
     <TargetFrameworks>netcoreapp2.1;netcoreapp3.1;net6.0;net8.0;net462;net48</TargetFrameworks>
   </PropertyGroup>
+  -->
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'"><!-- enable System.Drawing.Common on .NET 6 -->
     <RuntimeHostConfigurationOption Include="System.Drawing.EnableUnixSupport" Value="true" />
