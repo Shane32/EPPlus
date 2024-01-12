@@ -31,7 +31,9 @@
  *******************************************************************************/
 using System;
 using System.Xml;
+using OfficeOpenXml.AutoFit;
 using OfficeOpenXml.Style;
+
 namespace OfficeOpenXml
 {
     /// <summary>
@@ -287,13 +289,13 @@ namespace OfficeOpenXml
         /// Note: Cells containing formulas are ignored since EPPlus don't have a calculation engine.
         ///       Wrapped and merged cells are also ignored.
         /// </summary>
-        /// <param name="MinimumWidth">Minimum column width</param>
+        /// <param name="minimumWidth">Minimum column width</param>
 #if NET6_0_OR_GREATER
         [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 #endif
-        public void AutoFit(double MinimumWidth)
+        public void AutoFit(double minimumWidth)
         {
-            _worksheet.Cells[1, _columnMin, ExcelPackage.MaxRows, _columnMax].AutoFitColumns(MinimumWidth);
+            _worksheet.Cells[1, _columnMin, ExcelPackage.MaxRows, _columnMax].AutoFitColumns(minimumWidth);
         }
 
         /// <summary>
@@ -301,14 +303,27 @@ namespace OfficeOpenXml
         /// Note: Cells containing formulas are ignored since EPPlus don't have a calculation engine.
         ///       Wrapped and merged cells are also ignored.
         /// </summary>
-        /// <param name="MinimumWidth">Minimum column width</param>
-        /// <param name="MaximumWidth">Maximum column width</param>
+        /// <param name="minimumWidth">Minimum column width, or -1 for the worksheet's default column width</param>
+        /// <param name="maximumWidth">Maximum column width, or -1 for no maximum</param>
 #if NET6_0_OR_GREATER
         [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 #endif
-        public void AutoFit(double MinimumWidth, double MaximumWidth)
+        public void AutoFit(double minimumWidth, double maximumWidth)
         {
-            _worksheet.Cells[1, _columnMin, ExcelPackage.MaxRows, _columnMax].AutoFitColumns(MinimumWidth, MaximumWidth);
+            _worksheet.Cells[1, _columnMin, ExcelPackage.MaxRows, _columnMax].AutoFitColumns(minimumWidth, maximumWidth);
+        }
+
+        /// <inheritdoc cref="AutoFit(double, double)"/>
+        public void AutoFit<TTextMeasurer>(double minimumWidth = -1, double maximumWidth = -1)
+            where TTextMeasurer : ITextMeasurer, new()
+        {
+            _worksheet.Cells[1, _columnMin, ExcelPackage.MaxRows, _columnMax].AutoFitColumns<TTextMeasurer>(minimumWidth, maximumWidth);
+        }
+
+        /// <inheritdoc cref="AutoFit(double, double)"/>
+        public void AutoFit(ITextMeasurer textMeasurer, double minimumWidth = -1, double maximumWidth = -1)
+        {
+            _worksheet.Cells[1, _columnMin, ExcelPackage.MaxRows, _columnMax].AutoFitColumns(textMeasurer, minimumWidth, maximumWidth);
         }
 
         /// <summary>

@@ -30,6 +30,7 @@
  * Jan Källman		    License changed GPL-->LGPL  2011-12-27
  * Eyal Seagull		    Conditional Formatting      2012-04-03
  *******************************************************************************/
+using OfficeOpenXml.AutoFit;
 using OfficeOpenXml.Compatibility;
 using OfficeOpenXml.ConditionalFormatting;
 using OfficeOpenXml.DataValidation;
@@ -780,13 +781,13 @@ namespace OfficeOpenXml
         ///       Wrapped and merged cells are also ignored.
         /// </summary>
         /// <remarks>This method will not work if you run in an environment that does not support GDI</remarks>
-        /// <param name="MinimumWidth">Minimum column width</param>
+        /// <param name="minimumWidth">Minimum column width</param>
 #if NET6_0_OR_GREATER
         [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 #endif
-        public void AutoFitColumns(double MinimumWidth)
+        public void AutoFitColumns(double minimumWidth)
         {
-            AutoFitColumns(MinimumWidth, double.MaxValue);
+            AutoFitColumns(minimumWidth, double.MaxValue);
         }
 
         /// <summary>
@@ -795,13 +796,31 @@ namespace OfficeOpenXml
         ///       Wrapped and merged cells are also ignored.
         ///      Hidden columns are left hidden.
         /// </summary>
-        /// <param name="MinimumWidth">Minimum column width</param>
-        /// <param name="MaximumWidth">Maximum column width</param>
+        /// <param name="minimumWidth">Minimum column width, or -1 for the worksheet's default column width</param>
+        /// <param name="maximumWidth">Maximum column width, or -1 for no maximum</param>
 #if NET6_0_OR_GREATER
         [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 #endif
-        public void AutoFitColumns(double MinimumWidth, double MaximumWidth)
+        public void AutoFitColumns(double minimumWidth, double maximumWidth)
         {
+            AutoFitColumns<WindowsFormsTextMeasurer>(minimumWidth, maximumWidth);
+        }
+        /// <inheritdoc cref="AutoFitColumns(double, double)"/>
+        public void AutoFitColumns<TTextMeasurer>(double minimumWidth = -1, double maximumWidth = -1)
+            where TTextMeasurer : ITextMeasurer, new()
+        {
+            minimumWidth = minimumWidth < 0 ? _worksheet.DefaultColWidth : minimumWidth;
+            maximumWidth = maximumWidth < 0 ? double.MaxValue : maximumWidth;
+            using (var measurer = new TTextMeasurer())
+            {
+                AutoFitColumns(measurer, minimumWidth, maximumWidth);
+            }
+        }
+        /// <inheritdoc cref="AutoFitColumns(double, double)"/>
+        public void AutoFitColumns(ITextMeasurer textMeasurer, double minimumWidth = -1, double maximumWidth = -1)
+        {
+            minimumWidth = minimumWidth < 0 ? _worksheet.DefaultColWidth : minimumWidth;
+            maximumWidth = maximumWidth < 0 ? double.MaxValue : maximumWidth;
             if (_worksheet.Dimension == null)
             {
                 return;
@@ -810,7 +829,7 @@ namespace OfficeOpenXml
             {
                 SetToSelectedRange();
             }
-            var fontCache = new Dictionary<int, Font>();
+            var fontCache = new Dictionary<int, ExcelFontXml>();
 
             bool doAdjust = _worksheet._package.DoAdjustDrawings;
             _worksheet._package.DoAdjustDrawings = false;
@@ -823,7 +842,7 @@ namespace OfficeOpenXml
 
             if (Addresses == null)
             {
-                SetMinWidth(MinimumWidth, fromCol, toCol);
+                SetMinWidth(minimumWidth, fromCol, toCol);
             }
             else
             {
@@ -831,7 +850,7 @@ namespace OfficeOpenXml
                 {
                     fromCol = addr._fromCol > _worksheet.Dimension._fromCol ? addr._fromCol : _worksheet.Dimension._fromCol;
                     toCol = addr._toCol < _worksheet.Dimension._toCol ? addr._toCol : _worksheet.Dimension._toCol;
-                    SetMinWidth(MinimumWidth, fromCol, toCol);
+                    SetMinWidth(minimumWidth, fromCol, toCol);
                 }
             }
 
@@ -859,28 +878,8 @@ namespace OfficeOpenXml
 
             var styles = _worksheet.Workbook.Styles;
             var nf = styles.Fonts[styles.CellXfs[0].FontId];
-            var fs = FontStyle.Regular;
-            if (nf.Bold) fs |= FontStyle.Bold;
-            if (nf.UnderLine) fs |= FontStyle.Underline;
-            if (nf.Italic) fs |= FontStyle.Italic;
-            if (nf.Strike) fs |= FontStyle.Strikeout;
-            var nfont = new Font(nf.Name, nf.Size, fs);
 
             var normalSize = Convert.ToSingle(ExcelWorkbook.GetWidthPixels(nf.Name, nf.Size));
-
-            Bitmap b;
-            Graphics g = null;
-            try
-            {
-                //Check for missing GDI+, then use WPF istead.
-                b = new Bitmap(1, 1);
-                g = Graphics.FromImage(b);
-                g.PageUnit = GraphicsUnit.Pixel;
-            }
-            catch
-            {
-                return;
-            }
 
             foreach (var cell in this)
             {
@@ -889,28 +888,21 @@ namespace OfficeOpenXml
 
                 if (cell.Merge == true || cell.Style.WrapText) continue;
                 var fntID = styles.CellXfs[cell.StyleID].FontId;
-                Font f;
+                ExcelFontXml fnt;
                 if (fontCache.ContainsKey(fntID))
                 {
-                    f = fontCache[fntID];
+                    fnt = fontCache[fntID];
                 }
                 else
                 {
-                    var fnt = styles.Fonts[fntID];
-                    fs = FontStyle.Regular;
-                    if (fnt.Bold) fs |= FontStyle.Bold;
-                    if (fnt.UnderLine) fs |= FontStyle.Underline;
-                    if (fnt.Italic) fs |= FontStyle.Italic;
-                    if (fnt.Strike) fs |= FontStyle.Strikeout;
-                    f = new Font(fnt.Name, fnt.Size, fs);
-
-                    fontCache.Add(fntID, f);
+                    fnt = styles.Fonts[fntID];
+                    fontCache.Add(fntID, fnt);
                 }
                 var ind = styles.CellXfs[cell.StyleID].Indent;
                 var textForWidth = cell.TextForWidth;
                 var t = textForWidth + (ind > 0 && !string.IsNullOrEmpty(textForWidth) ? new string('_', ind) : "");
                 if (t.Length > 32000) t = t.Substring(0, 32000); //Issue
-                var size = g.MeasureString(t, f, 10000, StringFormat.GenericDefault);
+                var size = textMeasurer.MeasureString(t, fnt, 10000);
 
                 double width;
                 double r = styles.CellXfs[cell.StyleID].TextRotation;
@@ -935,7 +927,7 @@ namespace OfficeOpenXml
 
                 if (width > _worksheet.Column(cell._fromCol).Width)
                 {
-                    _worksheet.Column(cell._fromCol).Width = width > MaximumWidth ? MaximumWidth : width;
+                    _worksheet.Column(cell._fromCol).Width = width > maximumWidth ? maximumWidth : width;
                 }
             }
             _worksheet.Drawings.AdjustWidth(drawWidths);
