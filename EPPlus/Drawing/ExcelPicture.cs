@@ -61,9 +61,8 @@ namespace OfficeOpenXml.Drawing
                 Part = drawings.Part.Package.GetPart(UriPic);
                 FileInfo f = new FileInfo(UriPic.OriginalString);
                 ContentType = GetContentType(f.Extension);
-                var iby = Part.GetStream().ToArray();
-                _imageStream = new MemoryStream(iby);
-                var ii = _drawings._package.LoadImage(iby, UriPic, Part);
+                _imageBytes = Part.GetStream().ToArray();
+                var ii = _drawings._package.LoadImage(_imageBytes, UriPic, Part);
                 ImageHash = ii.Hash;
 
                 //_height = _image.Height;
@@ -100,8 +99,7 @@ namespace OfficeOpenXml.Drawing
 
             var package = drawings.Worksheet._package.Package;
             //Get the picture if it exists or save it if not.
-            var iby = ImageToByteArray(image);
-            _imageStream = new MemoryStream(iby);
+            _imageBytes = ImageToByteArray(image);
             string relID = SavePicture(image);
 
             //Create relationship
@@ -131,10 +129,10 @@ namespace OfficeOpenXml.Drawing
             var imageStream2 = new MemoryStream();
             CopyStream(imagestream1, imageStream2);
             imagestream1.Close();
+            var img = imageStream2.ToArray();
             imageStream2.Position = 0;
             var image = Image.FromStream(imageStream2);
-            _imageStream = imageStream2;
-            var img = _imageStream.ToArray();
+            _imageBytes = img;
             UriPic = GetNewUri(package, "/xl/media/{0}" + imageFile.Name);
             var ii = _drawings._package.AddImage(img, UriPic, ContentType);
             string relID;
@@ -331,16 +329,16 @@ namespace OfficeOpenXml.Drawing
         }
 
         internal string ImageHash { get; set; }
-        private MemoryStream __imageStream = null;
-        private MemoryStream _imageStream
+        private byte[] __imageBytes = null;
+        private byte[] _imageBytes
         {
             get
             {
-                return __imageStream;
+                return __imageBytes;
             }
             set
             {
-                __imageStream = value;
+                __imageBytes = value;
 #pragma warning disable CA1416 // Validate platform compatibility
                 _image?.Dispose();
 #pragma warning restore CA1416 // Validate platform compatibility
@@ -360,8 +358,7 @@ namespace OfficeOpenXml.Drawing
             {
                 if (_image == null)
                 {
-                    _imageStream.Position = 0;
-                    _image = Image.FromStream(_imageStream);
+                    _image = Image.FromStream(new MemoryStream(_imageBytes));
                 }
                 return _image;
             }
@@ -371,7 +368,7 @@ namespace OfficeOpenXml.Drawing
                 {
                     _image?.Dispose();
                     _image = null;
-                    __imageStream = new MemoryStream(ImageToByteArray(value));
+                    _imageBytes = ImageToByteArray(value);
                     try
                     {
                         string relID = SavePicture(value);
@@ -389,13 +386,14 @@ namespace OfficeOpenXml.Drawing
         }
         public void SaveImageTo(Stream stream)
         {
-            _imageStream.Position = 0;
-            CopyStream(_imageStream, stream);
+            if (__imageBytes != null)
+                stream.Write(__imageBytes, 0, __imageBytes.Length);
         }
 #if NET6_0_OR_GREATER
         [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 #endif
-        ImageFormat _imageFormat =ImageFormat.Jpeg;
+        private ImageFormat _imageFormat = null;
+        private bool _imageFormatSet = false;
         /// <summary>
         /// Image format
         /// If the picture is created from an Image this type is always Jpeg
@@ -407,6 +405,11 @@ namespace OfficeOpenXml.Drawing
         {
             get
             {
+                if (!_imageFormatSet)
+                {
+                    _imageFormat = ImageFormat.Jpeg;
+                    _imageFormatSet = true;
+                }
                 return _imageFormat;
             }
             internal set
