@@ -100,6 +100,7 @@ namespace OfficeOpenXml.Drawing
             var package = drawings.Worksheet._package.Package;
             //Get the picture if it exists or save it if not.
             _imageBytes = ImageToByteArray(image);
+            _image = image;
             string relID = SavePicture(image);
 
             //Create relationship
@@ -151,6 +152,7 @@ namespace OfficeOpenXml.Drawing
                 UriPic = UriHelper.ResolvePartUri(rel.SourceUri, rel.TargetUri);
             }
             ImageHash = ii.Hash;
+            _image = image;
             _height = image.Height;
             _width = image.Width;
             SetPosDefaults(image);
