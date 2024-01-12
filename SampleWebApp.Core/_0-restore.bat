@@ -1,2 +1,0 @@
-dotnet restore
-pause

@@ -22,14 +22,10 @@
  *******************************************************************************
  * Mats Alm   		                Added		                2013-12-03
  *******************************************************************************/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Globalization;
-using OfficeOpenXml.FormulaParsing.Utilities;
 using OfficeOpenXml.FormulaParsing.Exceptions;
-using util=OfficeOpenXml.Utils;
+using OfficeOpenXml.FormulaParsing.Utilities;
+using System.Globalization;
+using System.Linq;
 
 namespace OfficeOpenXml.FormulaParsing.Excel.Functions
 {
@@ -44,7 +40,7 @@ namespace OfficeOpenXml.FormulaParsing.Excel.Functions
                 return r == null ? 0 : r.ValueDouble;
             }
             if (obj is double) return obj;
-            if (obj.IsNumeric()) return util.ConvertUtil.GetValueDouble(obj);
+            if (obj.IsNumeric()) return OfficeOpenXml.Utils.ConvertUtil.GetValueDouble(obj);
             var str = obj != null ? obj.ToString() : string.Empty;
             try
             {

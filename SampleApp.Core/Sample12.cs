@@ -31,8 +31,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Microsoft.Data.SqlClient;
 using OfficeOpenXml;
-using System.Data.SqlClient;
 using OfficeOpenXml.Table.PivotTable;
 using OfficeOpenXml.Drawing.Chart;
 namespace EPPlusSamples

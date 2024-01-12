@@ -30,33 +30,28 @@
  * Jan Källman		    License changed GPL-->LGPL  2011-12-27
  * Eyal Seagull		    Conditional Formatting      2012-04-03
  *******************************************************************************/
+using OfficeOpenXml.Compatibility;
+using OfficeOpenXml.ConditionalFormatting;
+using OfficeOpenXml.DataValidation;
+using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
+using OfficeOpenXml.Style;
+using OfficeOpenXml.Style.XmlAccess;
+using OfficeOpenXml.Table;
+using OfficeOpenXml.Utils;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 using System.Data;
-using System.Threading;
-using OfficeOpenXml.FormulaParsing;
-using OfficeOpenXml.Style;
-using System.Xml;
 using System.Drawing;
 using System.Globalization;
-using System.Collections;
-using OfficeOpenXml.Table;
-using System.Text.RegularExpressions;
 using System.IO;
 using System.Linq;
-using OfficeOpenXml.DataValidation;
-using OfficeOpenXml.DataValidation.Contracts;
 using System.Reflection;
-using OfficeOpenXml.Style.XmlAccess;
-using System.Security;
-using OfficeOpenXml.ConditionalFormatting;
-using OfficeOpenXml.ConditionalFormatting.Contracts;
-using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
-using w = System.Windows;
-using OfficeOpenXml.Utils;
-using OfficeOpenXml.Compatibility;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Xml;
 
 namespace OfficeOpenXml
 {

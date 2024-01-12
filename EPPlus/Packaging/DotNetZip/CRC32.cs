@@ -808,6 +808,11 @@ namespace OfficeOpenXml.Packaging.Ionic.Crc
             if (!_leaveOpen)
                 _innerStream.Close();
         }
+#else
+        public override void Close()
+        {
+            base.Close();
+        }
 #endif
     }
 
