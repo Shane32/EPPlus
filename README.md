@@ -2,14 +2,39 @@
 
 [![Nuget](https://img.shields.io/nuget/v/EPPlus-LGPL)](https://www.nuget.org/packages/EPPlus-LGPL)
 
-EPPlus-LGPL is an unofficial EPPlus library which includes bug fixes beyond EPPlus 4.5.3.3 while retaining a LGPL license.
+EPPlus-LGPL is an unofficial EPPlus library which includes bug fixes beyond EPPlus 4.5.3.3
+while retaining a LGPL license, such as support for .NET 8. (The official version of EPPlus
+v5+ is not available for commercial use without acquiring a license.)
 
-:warning: 4.5.3.3 is the last official version of EPPlus under the LGPL License; now it has been archived.
-EPPlus will from version 5 be licensed under the [Polyform Noncommercial 1.0.0]( https://polyformproject.org/licenses/noncommercial/1.0.0/) license.
-With the new license EPPlus is still free to use in some cases, but will require a commercial license to be used in a commercial business.
-More information on the license change on [their website](https://www.epplussoftware.com/Home/LgplToPolyform).
+## .NET 6+ support on Linux
+
+System.Drawing.Common support on Linux is deprecated on .NET 6 and removed from .NET 7 and .NET 8.
+This library currently relies on its support for the following features:
+
+* Adding images
+* Setting fonts via the `Font` class
+* Auto-sizing columns
+
+So long as you do not use these features, you can use this library on .NET 6+ on Linux. Note that
+you can set fonts by setting the individual font properties such as `Name`, `Bold`, `Italic`, `Size`,
+and so on.
+
+For prior versions of .NET Core, you will need to install the `libgdiplus` package. For example, on
+Ubuntu, you can run `sudo apt install libgdiplus` to install it.
+
+To use `libgdiplus` on .NET 6, you must add the below to your project file.
+
+```xml
+<ItemGroup>
+  <RuntimeHostConfigurationOption Include="System.Drawing.EnableUnixSupport" Value="true" />
+</ItemGroup>
+```
+
+For more information, visit https://learn.microsoft.com/en-us/dotnet/core/compatibility/core-libraries/6.0/system-drawing-common-windows-only
 
 ***
+
+# About EPPlus
 
 ## Create advanced Excel spreadsheets using .NET, without the need of interop.
 
@@ -34,11 +59,13 @@ EPPlus has no dependencies other than .NET.
 * Many more... 
 
 ## Overview
+
 This project started with the source from ExcelPackage. It was a great project to start from.
 It had the basic functionality needed to read and write a spreadsheet.
+
 Advantages over other:
-EPPlus uses dictionaries to access cell data, making performance a lot better.
-Complete integration with .NET 
+- EPPlus uses dictionaries to access cell data, making performance a lot better.
+- Complete integration with .NET 
 
 ## New features in version 4.5
 
@@ -48,10 +75,10 @@ Complete integration with .NET
 * Bug fixes and minor changes, see below and visit https://github.com/JanKallman/EPPlus for tutorials, samples and the latest information
 
 Important Notes:
-Breaking change in .NET Core: The Worksheets collection will be zero based as default.
-This can be altered by setting the ExcelPackage.Compatibility.IsWorksheets1Based to true.
-.NET Core will have this property set to false, and .Net 3.5 and .Net 4 version will have this property set to true for backward compatibility reasons.
-This property can also be set via the appsettings.json file in .Net Core or the app.config file. See sample project for examples!
+- Breaking change in .NET Core: The Worksheets collection will be zero based as default.
+- This can be altered by setting the ExcelPackage.Compatibility.IsWorksheets1Based to true.
+- .NET Core will have this property set to false, and .Net 3.5 and .Net 4 version will have this property set to true for backward compatibility reasons.
+- This property can also be set via the appsettings.json file in .Net Core or the app.config file. See sample project for examples!
 
 .NET Core uses a preview of System.Drawing.Common, so be aware of that. We will update it as Microsoft releases newer versions.
 System.Drawing.Common requires libgdiplus to be installed on non-Windows operating systems.
@@ -59,17 +86,26 @@ Use your favorite package manager to install it.
 For example:
 
 Homebrew on MacOS:
+
+```
 brew install mono-libgdiplus
+```
 
 apt-get:
+
+```
 apt-get install libgdiplus
+```
 
 EPPlus-A .NET Spreadsheet API
 
-## Changes
+## Changes since 4.0
+
+4.5.3.10
+* Added additional compliation targets including .NET 6 and .NET 8; reduced dependencies
 
 4.5.3.9
-* Fixed recalculation under .NET Framework
+* Fixed recalculation under .NET Framework; support Source Link debugging
 
 4.5.3.8
 * Fixed the bug of address of ExcelNamedRange in ExcelNamedRangeCollection and Cell of ExcelSparkline in ExcelNamedRangeCollection when inserting row or column in ExcelWorksheet.
@@ -195,7 +231,7 @@ This property can be set via the appsettings.json file in .Net Core or the app.c
 * Rowheight was wrong in some cases.
 * ExcelSeries.Header had an incorrect validation check.
 
-New features 4.0
+## New features in 4.0
 
 Replaced Packaging API with DotNetZip
 * This will remove any problems with Isolated Storage and enable multithreading

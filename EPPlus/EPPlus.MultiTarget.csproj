@@ -12,7 +12,7 @@
     <Company></Company>
     <Product>EPPlus LGPL Edition</Product>
 	<Title>Updated Version of EPPlus 4.5.3.3</Title>
-    <Description>EPPlus-LGPL is an unofficial EPPlus library which includes bug fixes beyond EPPlus 4.5.3.3.</Description>
+    <Description>EPPlus-LGPL is an unofficial EPPlus library which includes bug fixes beyond EPPlus 4.5.3.3 including support for .NET 6+.</Description>
     <AssemblyName>EPPlus-LGPL</AssemblyName>
     <RootNamespace>EPPlus</RootNamespace>
     <RepositoryUrl></RepositoryUrl>
@@ -20,6 +20,9 @@
     <Copyright>Copyright (c) 2011 Jan Källman, et al</Copyright>
 	<DebugType>embedded</DebugType>
     <PackageReleaseNotes>
+		4.5.3.10
+		* Added additional compliation targets including .NET 6 and .NET 8; reduced dependencies
+		
 		4.5.3.9
 		* Fixed recalculating on .NET Framework; support Source Link debugging
 
@@ -35,7 +38,7 @@
     <AssemblyOriginatorKeyFile>OpenOfficeXml.Shane32.snk</AssemblyOriginatorKeyFile>
     <NeutralLanguage />
     <PackageLicenseFile>lgpl-3.0.txt</PackageLicenseFile>
-	<NoWarn>$(NoWarn);CS1591;CS1572</NoWarn>
+	<NoWarn>$(NoWarn);CS1591</NoWarn>
 	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<WarningsAsErrors>CA1416</WarningsAsErrors>
   </PropertyGroup>
