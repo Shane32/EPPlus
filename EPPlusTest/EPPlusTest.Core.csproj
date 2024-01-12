@@ -22,6 +22,10 @@
   </PropertyGroup>
   -->
 
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'"><!-- enable System.Drawing.Common on .NET 6 -->
     <RuntimeHostConfigurationOption Include="System.Drawing.EnableUnixSupport" Value="true" />
   </ItemGroup>
