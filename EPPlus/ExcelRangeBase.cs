@@ -901,7 +901,6 @@ namespace OfficeOpenXml
                 var ind = styles.CellXfs[cell.StyleID].Indent;
                 var textForWidth = cell.TextForWidth;
                 var t = textForWidth + (ind > 0 && !string.IsNullOrEmpty(textForWidth) ? new string('_', ind) : "");
-                if (t.Length > 32000) t = t.Substring(0, 32000); //Issue
                 var size = textMeasurer.MeasureString(t, fnt, 10000);
 
                 double width;

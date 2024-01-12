@@ -9,7 +9,17 @@ namespace OfficeOpenXml.AutoFit
     /// </summary>
     public interface ITextMeasurer : IDisposable
     {
-        /// <inheritdoc cref="System.Drawing.Graphics.MeasureString(string?, Font, int)"/>
-        SizeF MeasureString(string text, ExcelFontXml excelFont, int width);
+        /// <summary>
+        /// Measures the specified text when drawn with the specified <see cref="Font"/>.
+        /// </summary>
+        /// <param name="text">The string to measure.</param>
+        /// <param name="excelFont"><see cref="ExcelFontXml"/> that defines the text format.</param>
+        /// <param name="maxWidth">Maximum width of the string in pixels, or -1 for no maximum.</param>
+        /// <returns>
+        /// This method returns a <see cref="SizeF"/> structure that represents the size in pixels
+        /// of the text specified by the <paramref name="text"/> parameter as drawn
+        /// with the <paramref name="excelFont"/> parameter.
+        /// </returns>
+        SizeF MeasureString(string text, ExcelFontXml excelFont, int maxWidth = -1);
     }
 }
