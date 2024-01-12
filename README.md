@@ -8,8 +8,9 @@ v5+ is not available for commercial use without acquiring a license.)
 
 ## .NET 6+ support on Linux
 
-System.Drawing.Common support on Linux is deprecated on .NET 6 and removed from .NET 7 and .NET 8.
-This library currently relies on its support for the following features:
+All features are available on Windows. However, System.Drawing.Common support on Linux is deprecated
+on .NET 6 and removed from .NET 7 and .NET 8. This library currently relies on its support for the
+following features:
 
 * Adding images
 * Setting fonts via the `Font` class
@@ -19,10 +20,10 @@ So long as you do not use these features, you can use this library on .NET 6+ on
 you can set fonts by setting the individual font properties such as `Name`, `Bold`, `Italic`, `Size`,
 and so on.
 
-For prior versions of .NET Core, you will need to install the `libgdiplus` package. For example, on
-Ubuntu, you can run `sudo apt install libgdiplus` to install it.
+To use these features on prior versions of .NET Core running on Linux, you will need to install the
+`libgdiplus` package. For example, on Ubuntu, you can run `sudo apt install libgdiplus` to install it.
 
-To use `libgdiplus` on .NET 6, you must add the below to your project file.
+To use these features on .NET 6 running on Linux, you must add the below to your project file.
 
 ```xml
 <ItemGroup>
