@@ -17,7 +17,7 @@
     <TargetFrameworks>netcoreapp2.1;netcoreapp3.1;net6.0;net8.0</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">
-    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1;net6.0;net8.0;net462;net48</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1;net6.0;net8.0;net462;net48;net481</TargetFrameworks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true' AND ('$(TargetFramework)' != 'net8.0' OR '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true')">
