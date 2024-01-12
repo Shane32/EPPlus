@@ -47,11 +47,11 @@
  * The author accepts no liability for any damage or loss of business that this product may cause.
  */
 using System;
+using System.Drawing;
 using System.IO;
 using System.Xml;
+using Microsoft.Data.SqlClient;
 using OfficeOpenXml;
-using System.Data.SqlClient;
-using System.Drawing;
 using OfficeOpenXml.Style;
 
 namespace EPPlusSamples
