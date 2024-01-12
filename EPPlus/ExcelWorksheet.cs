@@ -879,7 +879,11 @@ namespace OfficeOpenXml
             var xr = XmlReader.Create(stream,new XmlReaderSettings() { DtdProcessing = DtdProcessing.Prohibit, IgnoreWhitespace = true });
 #else
             var xr = new XmlTextReader(stream);
+#if NET35
             xr.ProhibitDtd = true;
+#else
+            xr.DtdProcessing = DtdProcessing.Prohibit;
+#endif
             xr.WhitespaceHandling = WhitespaceHandling.None;
 #endif
             LoadColumns(xr);    //columnXml
