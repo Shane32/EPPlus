@@ -155,7 +155,7 @@ namespace OfficeOpenXml
                     }
                     Thread.Sleep(0);
                 }
-                catch (FormatException fe)
+                catch (FormatException)
                 {
                     throw;
                 }

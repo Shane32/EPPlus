@@ -29,21 +29,19 @@
  * Jan Källman		    Initial Release		        2009-10-01
  * Jan Källman		    License changed GPL-->LGPL 2011-12-27
  *******************************************************************************/
-using System;
-using System.Xml;
-using System.Linq;
-using System.Collections.Generic;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Logical;
-using draw=System.Drawing;
-using OfficeOpenXml.Style;
-using OfficeOpenXml.Style.XmlAccess;
-using OfficeOpenXml.Style.Dxf;
 using OfficeOpenXml.ConditionalFormatting;
+using OfficeOpenXml.Style;
+using OfficeOpenXml.Style.Dxf;
+using OfficeOpenXml.Style.XmlAccess;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml;
 namespace OfficeOpenXml
 {
-	/// <summary>
-	/// Containts all shared cell styles for a workbook
-	/// </summary>
+    /// <summary>
+    /// Containts all shared cell styles for a workbook
+    /// </summary>
     public sealed class ExcelStyles : XmlHelper
     {
         const string NumberFormatsPath = "d:styleSheet/d:numFmts";
