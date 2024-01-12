@@ -31,13 +31,9 @@ namespace SampleWebApp.Core
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                // Map default controller route
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }
