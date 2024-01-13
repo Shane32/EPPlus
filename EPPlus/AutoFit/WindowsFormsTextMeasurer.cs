@@ -8,22 +8,29 @@ namespace OfficeOpenXml.AutoFit
 #if NET6_0_OR_GREATER
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 #endif
+    /// <summary>
+    /// Measures text using the Windows Forms Graphics.MeasureString method.
+    /// </summary>
     public class WindowsFormsTextMeasurer : ITextMeasurer
     {
         private readonly Dictionary<ExcelFontXml, Font> _fonts = new Dictionary<ExcelFontXml, Font>();
         private readonly Bitmap _bitmap = new Bitmap(1, 1);
         private readonly Graphics _graphics;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WindowsFormsTextMeasurer"/> class.
+        /// </summary>
         public WindowsFormsTextMeasurer()
         {
             _graphics = Graphics.FromImage(_bitmap);
             _graphics.PageUnit = GraphicsUnit.Pixel;
         }
 
+        /// <inheritdoc/>
 #if NET6_0_OR_GREATER
         [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 #endif
-        public SizeF MeasureString(string text, ExcelFontXml excelFont, int maxWidth)
+        public SizeF MeasureString(string text, ExcelFontXml excelFont, int maxWidth = -1)
         {
             if (text == null)
                 text = "";
@@ -45,6 +52,7 @@ namespace OfficeOpenXml.AutoFit
             return _graphics.MeasureString(text, font, maxWidth, StringFormat.GenericDefault);
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
             foreach (var font in _fonts.Values)
