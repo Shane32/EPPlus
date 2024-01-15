@@ -25,6 +25,7 @@
  *******************************************************************************
  * Shane Krueger                    Added                       15-JAN-2024
  *******************************************************************************/
+#pragma warning disable CA1416 // Validate platform compatibility
 #if NET8_0_OR_GREATER
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OfficeOpenXml.AutoFit;
