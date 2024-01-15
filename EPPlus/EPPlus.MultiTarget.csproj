@@ -20,7 +20,10 @@
     <Copyright>Copyright (c) 2011 Jan Källman, et al</Copyright>
 	<DebugType>embedded</DebugType>
     <PackageReleaseNotes>
-		4.5.3.10
+		4.5.3.11
+		* Added support for AutoFit on .NET 6+ on Linux using font metrics collected from a Windows PC
+
+        4.5.3.10
 		* Added additional compliation targets including .NET 6 and .NET 8; reduced dependencies
 		
 		4.5.3.9

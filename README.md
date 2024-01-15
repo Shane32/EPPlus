@@ -14,7 +14,6 @@ following features:
 
 * Adding images
 * Setting fonts via the `Font` class
-* Auto-sizing columns
 
 So long as you do not use these features, you can use this library on .NET 6+ on Linux. Note that
 you can set fonts by setting the individual font properties such as `Name`, `Bold`, `Italic`, `Size`,
@@ -32,6 +31,9 @@ To use these features on .NET 6 running on Linux, you must add the below to your
 ```
 
 For more information, visit https://learn.microsoft.com/en-us/dotnet/core/compatibility/core-libraries/6.0/system-drawing-common-windows-only
+
+Please note that the auto-sizing columns feature uses font metrics collected from a Windows PC, and
+may not carry metrics for the fonts you use.
 
 ***
 
@@ -101,6 +103,8 @@ apt-get install libgdiplus
 EPPlus-A .NET Spreadsheet API
 
 ## Changes since 4.0
+4.5.3.11
+* Added support for AutoFit on .NET 6+ on Linux using font metrics collected from a Windows PC
 
 4.5.3.10
 * Added additional compliation targets including .NET 6 and .NET 8; reduced dependencies
