@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 		.github\workflows\test-documentation.yml = .github\workflows\test-documentation.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FontSizeEstimator", "FontSizeEstimator\FontSizeEstimator.csproj", "{BE69AC45-D9DD-4E4E-9748-690A0FAFDF6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,12 @@ Global
 		{8360994E-9BD1-4429-AFB6-B15AA96EB13B}.Release 4.0|Any CPU.Build.0 = Release|Any CPU
 		{8360994E-9BD1-4429-AFB6-B15AA96EB13B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8360994E-9BD1-4429-AFB6-B15AA96EB13B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE69AC45-D9DD-4E4E-9748-690A0FAFDF6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE69AC45-D9DD-4E4E-9748-690A0FAFDF6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE69AC45-D9DD-4E4E-9748-690A0FAFDF6C}.Release 4.0|Any CPU.ActiveCfg = Release|Any CPU
+		{BE69AC45-D9DD-4E4E-9748-690A0FAFDF6C}.Release 4.0|Any CPU.Build.0 = Release|Any CPU
+		{BE69AC45-D9DD-4E4E-9748-690A0FAFDF6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE69AC45-D9DD-4E4E-9748-690A0FAFDF6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

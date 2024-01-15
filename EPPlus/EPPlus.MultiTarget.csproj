@@ -14,7 +14,7 @@
 	<Title>Updated Version of EPPlus 4.5.3.3</Title>
     <Description>EPPlus-LGPL is an unofficial EPPlus library which includes bug fixes beyond EPPlus 4.5.3.3 including support for .NET 6+.</Description>
     <AssemblyName>EPPlus-LGPL</AssemblyName>
-    <RootNamespace>EPPlus</RootNamespace>
+    <RootNamespace>OfficeOpenXml</RootNamespace>
     <RepositoryUrl></RepositoryUrl>
     <PackageTags>EPPlus Excel Spreadsheet xlsx ooxml</PackageTags>
     <Copyright>Copyright (c) 2011 Jan Källman, et al</Copyright>
@@ -91,6 +91,12 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.1" />
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="AutoFit\TextMeasurements.dat" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AutoFit\TextMeasurements.dat" />
   </ItemGroup>
   <ItemGroup>
     <None Include="../README.md" Pack="true" PackagePath="" />

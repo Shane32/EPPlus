@@ -49,6 +49,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -767,9 +768,6 @@ namespace OfficeOpenXml
         /// Note: Cells containing formulas must be calculated before autofit is called.
         /// Wrapped and merged cells are also ignored.
         /// </summary>
-#if NET6_0_OR_GREATER
-        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-#endif
         public void AutoFitColumns()
         {
             AutoFitColumns(_worksheet.DefaultColWidth);
@@ -782,9 +780,6 @@ namespace OfficeOpenXml
         /// </summary>
         /// <remarks>This method will not work if you run in an environment that does not support GDI</remarks>
         /// <param name="minimumWidth">Minimum column width</param>
-#if NET6_0_OR_GREATER
-        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-#endif
         public void AutoFitColumns(double minimumWidth)
         {
             AutoFitColumns(minimumWidth, double.MaxValue);
@@ -798,12 +793,20 @@ namespace OfficeOpenXml
         /// </summary>
         /// <param name="minimumWidth">Minimum column width, or -1 for the worksheet's default column width</param>
         /// <param name="maximumWidth">Maximum column width, or -1 for no maximum</param>
-#if NET6_0_OR_GREATER
-        [System.Runtime.Versioning.SupportedOSPlatform("windows")]
-#endif
         public void AutoFitColumns(double minimumWidth, double maximumWidth)
         {
+#if NETSTANDARD2_0_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                AutoFitColumns<WindowsFormsTextMeasurer>(minimumWidth, maximumWidth);
+            }
+            else
+            {
+                AutoFitColumns<EstimationTextMeasurer>(minimumWidth, maximumWidth);
+            }
+#else
             AutoFitColumns<WindowsFormsTextMeasurer>(minimumWidth, maximumWidth);
+#endif
         }
         /// <inheritdoc cref="AutoFitColumns(double, double)"/>
         public void AutoFitColumns<TTextMeasurer>(double minimumWidth = -1, double maximumWidth = -1)
@@ -901,7 +904,7 @@ namespace OfficeOpenXml
                 var ind = styles.CellXfs[cell.StyleID].Indent;
                 var textForWidth = cell.TextForWidth;
                 var t = textForWidth + (ind > 0 && !string.IsNullOrEmpty(textForWidth) ? new string('_', ind) : "");
-                var size = textMeasurer.MeasureString(t, fnt, 10000);
+                var size = textMeasurer.MeasureString(t, fnt.Name, fnt.Size, fnt.Bold, fnt.Italic, fnt.UnderLine, fnt.Strike, 10000);
 
                 double width;
                 double r = styles.CellXfs[cell.StyleID].TextRotation;
@@ -1524,7 +1527,7 @@ namespace OfficeOpenXml
                 return fullAddress;
             }
         }
-        #endregion
+#endregion
         #region Private Methods
         /// <summary>
         /// Set the value without altering the richtext property
