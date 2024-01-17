@@ -31,12 +31,12 @@ using System.Drawing;
 
 namespace OfficeOpenXml.AutoFit
 {
+    /// <summary>
+    /// Measures text using the Windows Forms <see cref="Graphics.MeasureString(string?, Font, int, StringFormat?)">Graphics.MeasureString</see> method.
+    /// </summary>
 #if NET6_0_OR_GREATER
     [System.Runtime.Versioning.SupportedOSPlatform("windows")]
 #endif
-    /// <summary>
-    /// Measures text using the Windows Forms Graphics.MeasureString method.
-    /// </summary>
     public class WindowsFormsTextMeasurer : ITextMeasurer
     {
         private readonly Dictionary<FontInfo, Font> _fonts = new Dictionary<FontInfo, Font>();
