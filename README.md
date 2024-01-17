@@ -103,7 +103,7 @@ apt-get install libgdiplus
 EPPlus-A .NET Spreadsheet API
 
 ## Changes since 4.0
-4.5.3.12
+4.5.3.13
 * Fix compatibility with ASP.NET Core 2.1
 
 4.5.3.11
