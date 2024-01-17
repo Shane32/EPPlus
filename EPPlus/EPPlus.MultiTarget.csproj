@@ -20,6 +20,9 @@
     <Copyright>Copyright (c) 2011 Jan Källman, et al</Copyright>
 	<DebugType>embedded</DebugType>
     <PackageReleaseNotes>
+		4.5.3.12
+		* Fix compatibility with ASP.NET Core 2.1
+
 		4.5.3.11
 		* Added support for AutoFit on .NET 6+ on Linux using font metrics collected from a Windows PC
 

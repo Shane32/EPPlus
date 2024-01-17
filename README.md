@@ -103,6 +103,9 @@ apt-get install libgdiplus
 EPPlus-A .NET Spreadsheet API
 
 ## Changes since 4.0
+4.5.3.12
+* Fix compatibility with ASP.NET Core 2.1
+
 4.5.3.11
 * Added support for AutoFit on .NET 6+ on Linux using font metrics collected from a Windows PC
 
