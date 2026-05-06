@@ -3463,7 +3463,7 @@ namespace OfficeOpenXml
             else
             {   
                 CreateNode("d:cols");
-                //CreateNode("d:sheetData");
+                CreateNode("d:sheetData");
                 CreateNode("d:mergeCells");
                 CreateNode("d:hyperlinks");
                 CreateNode("d:rowBreaks");
