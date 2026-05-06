@@ -4098,15 +4098,15 @@ namespace OfficeOpenXml
                         else
                         {
                             var relationship = Part.CreateRelationship(hyp, Packaging.TargetMode.External, ExcelPackage.schemaHyperlink);
-                        if (uri is ExcelHyperLink)
-                        {
-                            ExcelHyperLink hl = uri as ExcelHyperLink;
-                            sw.Write($"<{_nsPrefix}hyperlink ref=\"{ExcelCellBase.GetAddress(cse.Row, cse.Column)}\"{(string.IsNullOrEmpty(hl.Display) ? "" : $" display=\"{SecurityElement.Escape(hl.Display)}\"")}{(string.IsNullOrEmpty(hl.ToolTip) ? "" : $" tooltip=\"{SecurityElement.Escape(hl.ToolTip)}\"")}" + $" r:id=\"{relationship.Id}\"/>");
-                        }
-                        else
-                        {
-                            sw.Write($"<{_nsPrefix}hyperlink ref=\"{ExcelCellBase.GetAddress(cse.Row, cse.Column)}\" r:id=\"{relationship.Id}\"/>");
-                        }
+                            if (uri is ExcelHyperLink)
+                            {
+                                ExcelHyperLink hl = uri as ExcelHyperLink;
+                                sw.Write($"<{_nsPrefix}hyperlink ref=\"{ExcelCellBase.GetAddress(cse.Row, cse.Column)}\"{(string.IsNullOrEmpty(hl.Display) ? "" : $" display=\"{SecurityElement.Escape(hl.Display)}\"")}{(string.IsNullOrEmpty(hl.ToolTip) ? "" : $" tooltip=\"{SecurityElement.Escape(hl.ToolTip)}\"")}" + $" r:id=\"{relationship.Id}\"/>");
+                            }
+                            else
+                            {
+                                sw.Write($"<{_nsPrefix}hyperlink ref=\"{ExcelCellBase.GetAddress(cse.Row, cse.Column)}\" r:id=\"{relationship.Id}\"/>");
+                            }
                             id = relationship.Id;
                         }
                         //cell.HyperLinkRId = id;
