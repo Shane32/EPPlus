@@ -3435,18 +3435,26 @@ namespace OfficeOpenXml
             return string.Format("SUBTOTAL({0},{1}[{2}])", FunctionNum, col._tbl.Name, escapedColumn);
         }
 
+        private string GetWorksheetNamespacePrefix()
+        {
+            var worksheetNode = _worksheetXml.DocumentElement;
+            if (worksheetNode == null)
+            {
+                return string.Empty;
+            }
+
+            var prefix = worksheetNode.Prefix;
+            if (string.IsNullOrEmpty(prefix) && string.IsNullOrEmpty(worksheetNode.NamespaceURI) == false)
+            {
+                prefix = worksheetNode.GetPrefixOfNamespace(worksheetNode.NamespaceURI);
+            }
+
+            return string.IsNullOrEmpty(prefix) ? string.Empty : prefix + ":";
+        }
+
         private void SaveXml(Stream stream)
         {
-            // Ermittle den Namespace-Prefix aus dem Dokument
-            var worksheetNode = _worksheetXml.DocumentElement;
-            if (worksheetNode != null && !string.IsNullOrEmpty(worksheetNode.Prefix))
-            {
-                _nsPrefix = worksheetNode.Prefix + ":";
-            }
-            else
-            {
-                _nsPrefix = "";
-            }
+            _nsPrefix = GetWorksheetNamespacePrefix();
             //Create the nodes if they do not exist.
             StreamWriter sw = new StreamWriter(stream, System.Text.Encoding.UTF8, 65536);
             if (this is ExcelChartsheet)
