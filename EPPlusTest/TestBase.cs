@@ -8,7 +8,17 @@ namespace EPPlusTest
 {
     internal static class TestPlatform
     {
-        internal static bool IsLinux => Environment.OSVersion.Platform == PlatformID.Unix && Directory.Exists("/proc");
+        internal static bool IsLinux
+        {
+            get
+            {
+#if NETFRAMEWORK
+                return Environment.OSVersion.Platform == PlatformID.Unix;
+#else
+                return System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux);
+#endif
+            }
+        }
     }
 
     [TestClass]
