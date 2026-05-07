@@ -13,19 +13,22 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v6
-      - name: Setup .NET Core SDKs
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: |
-            6.0.x
-            8.0.x
-      - name: Setup legacy .NET Core SDKs
-        if: matrix.os != 'ubuntu-latest'
+      - name: Setup .NET Core SDKs for Windows
+        if: matrix.os == 'windows-latest'
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: |
             2.1.x
             3.1.x
+            6.0.x
+            8.0.x
+      - name: Setup .NET Core SDKs on Linux
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            6.0.x
+            8.0.x
       - name: Install dependencies
         run: dotnet restore
       - name: Build solution [Debug]
