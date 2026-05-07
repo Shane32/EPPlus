@@ -30,16 +30,7 @@
  * Jan Källman          Total rewrite               2010-03-01
  * Jan Källman		    License changed GPL-->LGPL  2011-12-27
  *******************************************************************************/
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Globalization;
-using System.IO;
-using System.Security;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Xml;
+using OfficeOpenXml.Compatibility;
 using OfficeOpenXml.ConditionalFormatting;
 using OfficeOpenXml.DataValidation;
 using OfficeOpenXml.Drawing;
@@ -47,14 +38,23 @@ using OfficeOpenXml.Drawing.Chart;
 using OfficeOpenXml.Drawing.Vml;
 using OfficeOpenXml.FormulaParsing.LexicalAnalysis;
 using OfficeOpenXml.Packaging.Ionic.Zip;
+using OfficeOpenXml.Sparkline;
 using OfficeOpenXml.Style.XmlAccess;
 using OfficeOpenXml.Table;
 using OfficeOpenXml.Table.PivotTable;
 using OfficeOpenXml.Utils;
-
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
 using System.Linq;
-using OfficeOpenXml.Compatibility;
-using OfficeOpenXml.Sparkline;
+using System.Security;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml;
+using RegexMatch = System.Text.RegularExpressions.Match;
 
 namespace OfficeOpenXml
 {
@@ -371,6 +371,7 @@ namespace OfficeOpenXml
         private XmlDocument _worksheetXml;
         internal ExcelWorksheetView _sheetView;
         internal ExcelHeaderFooter _headerFooter;
+        private string _nsPrefix = "";
         #endregion
         #region ExcelWorksheet Constructor
         /// <summary>
@@ -1018,7 +1019,7 @@ namespace OfficeOpenXml
             char[] block;
             int pos;
             StringBuilder sb = new StringBuilder();
-            Match startmMatch, endMatch;
+            RegexMatch startmMatch, endMatch;
             do
             {
                 int size = stream.Length < BLOCKSIZE ? (int)stream.Length : BLOCKSIZE;
@@ -1068,7 +1069,7 @@ namespace OfficeOpenXml
                         }
                     }
                     endMatch = Regex.Match(s, string.Format("(</[^>]*{0}[^>]*>)", "sheetData"));
-                    xml += "<sheetData/>" + s.Substring(endMatch.Index + endMatch.Length, s.Length - (endMatch.Index + endMatch.Length));
+                    xml += startmMatch.Value.Substring(0, startmMatch.Value.Length - 1) + "/>" + s.Substring(endMatch.Index + endMatch.Length, s.Length - (endMatch.Index + endMatch.Length));
                 }
                 if (sr.Peek() > -1)
                 {
@@ -1081,7 +1082,7 @@ namespace OfficeOpenXml
         }
         private void GetBlockPos(string xml, string tag, ref int start, ref int end)
         {
-            Match startmMatch, endMatch;
+            RegexMatch startmMatch, endMatch;
             startmMatch = Regex.Match(xml.Substring(start), string.Format("(<[^>]*{0}[^>]*>)", tag)); //"<[a-zA-Z:]*" + tag + "[?]*>");
 
             if (!startmMatch.Success) //Not found
@@ -1460,12 +1461,14 @@ namespace OfficeOpenXml
         /// <param name="sw">The writer</param>
         private void UpdateMergedCells(StreamWriter sw)
         {
-            sw.Write("<mergeCells>");
+            sw.Write($"<{_nsPrefix}mergeCells>");
             foreach (string address in _mergedCells)
             {
-                sw.Write("<mergeCell ref=\"{0}\" />", address);
+                sw.Write($"<{_nsPrefix}mergeCell ref=\"{address}\" />");
+
             }
-            sw.Write("</mergeCells>");
+            sw.Write($"</{_nsPrefix}mergeCells>");
+
         }
         /// <summary>
         /// Reads a row from the XML reader
@@ -3431,8 +3434,26 @@ namespace OfficeOpenXml
             return string.Format("SUBTOTAL({0},{1}[{2}])", FunctionNum, col._tbl.Name, escapedColumn);
         }
 
+        private string GetWorksheetNamespacePrefix()
+        {
+            var worksheetNode = _worksheetXml.DocumentElement;
+            if (worksheetNode == null)
+            {
+                return string.Empty;
+            }
+
+            var prefix = worksheetNode.Prefix;
+            if (string.IsNullOrEmpty(prefix) && string.IsNullOrEmpty(worksheetNode.NamespaceURI) == false)
+            {
+                prefix = worksheetNode.GetPrefixOfNamespace(worksheetNode.NamespaceURI);
+            }
+
+            return string.IsNullOrEmpty(prefix) ? string.Empty : prefix + ":";
+        }
+
         private void SaveXml(Stream stream)
         {
+            _nsPrefix = GetWorksheetNamespacePrefix();
             //Create the nodes if they do not exist.
             StreamWriter sw = new StreamWriter(stream, System.Text.Encoding.UTF8, 65536);
             if (this is ExcelChartsheet)
@@ -3533,13 +3554,13 @@ namespace OfficeOpenXml
                 var col=cse.Value._value as ExcelColumn;
                 if (col != null && col.PageBreak)
                 {
-                    breaks.AppendFormat("<brk id=\"{0}\" max=\"16383\" man=\"1\"/>", cse.Column);
+                    breaks.Append($"<{_nsPrefix}brk id=\"{cse.Column}\" max=\"16383\" man=\"1\"/>");
                     count++;
                 }
             }
             if (count > 0)
             {
-                sw.Write(string.Format("<colBreaks count=\"{0}\" manualBreakCount=\"{0}\">{1}</colBreaks>", count, breaks.ToString()));
+                sw.Write($"<{_nsPrefix}colBreaks count=\"{count}\" manualBreakCount=\"{count}\">{breaks}</{_nsPrefix}colBreaks>");
             }
         }
 
@@ -3554,13 +3575,13 @@ namespace OfficeOpenXml
                 var row=cse.Value._value as RowInternal;
                 if (row != null && row.PageBreak)
                 {
-                    breaks.AppendFormat("<brk id=\"{0}\" max=\"1048575\" man=\"1\"/>", cse.Row);
+                    breaks.Append($"<{_nsPrefix}brk id=\"{cse.Row}\" max=\"1048575\" man=\"1\"/>");
                     count++;
                 }
             }
             if (count>0)
             {
-                sw.Write(string.Format("<rowBreaks count=\"{0}\" manualBreakCount=\"{0}\">{1}</rowBreaks>", count, breaks.ToString()));                
+                sw.Write($"<{_nsPrefix}rowBreaks count=\"{count}\" manualBreakCount=\"{count}\">{breaks}</{_nsPrefix}rowBreaks>");
             }
         }
         /// <summary>
@@ -3574,13 +3595,13 @@ namespace OfficeOpenXml
             {
                 if (first)
                 {
-                    sw.Write("<cols>");
+                    sw.Write($"<{_nsPrefix}cols>");
                     first = false;
                 }
                 var col = cse.Value._value as ExcelColumn;
                 ExcelStyleCollection<ExcelXfs> cellXfs = _package.Workbook.Styles.CellXfs;
 
-                sw.Write("<col min=\"{0}\" max=\"{1}\"", col.ColumnMin, col.ColumnMax);
+                sw.Write($"<{_nsPrefix}col min=\"{col.ColumnMin}\" max=\"{col.ColumnMax}\"");
                 if (col.Hidden == true)
                 {
                     sw.Write(" hidden=\"1\"");
@@ -3592,8 +3613,8 @@ namespace OfficeOpenXml
                 sw.Write(string.Format(CultureInfo.InvariantCulture, " width=\"{0}\" customWidth=\"1\"", col.Width));
 
                 if (col.OutlineLevel > 0)
-                {                    
-                    sw.Write(" outlineLevel=\"{0}\" ", col.OutlineLevel);
+                {
+                    sw.Write($" outlineLevel=\"{col.OutlineLevel}\" ");
                     if (col.Collapsed)
                     {
                         if (col.Hidden)
@@ -3614,13 +3635,13 @@ namespace OfficeOpenXml
                 var styleID = col.StyleID >= 0 ? cellXfs[col.StyleID].newID : col.StyleID;
                 if (styleID > 0)
                 {
-                    sw.Write(" style=\"{0}\"", styleID);
+                    sw.Write($" style=\"{styleID}\"");
                 }
                 sw.Write("/>");
             }
             if (!first)
             {
-                sw.Write("</cols>");
+                sw.Write($"</{_nsPrefix}cols>");
             }
         }
         /// <summary>
@@ -3636,7 +3657,7 @@ namespace OfficeOpenXml
             var ss = _package.Workbook._sharedStrings;
             var styles = _package.Workbook.Styles;
             var cache = new StringBuilder();
-            cache.Append("<sheetData>");
+            cache.Append($"<{_nsPrefix}sheetData>");
 
             
             FixSharedFormulas(); //Fixes Issue #32
@@ -3668,21 +3689,21 @@ namespace OfficeOpenXml
                             {
                                 if (f.IsArray)
                                 {
-                                    cache.AppendFormat("<c r=\"{0}\" s=\"{1}\"{5}><f ref=\"{2}\" t=\"array\">{3}</f>{4}</c>", cse.CellAddress, styleID < 0 ? 0 : styleID, f.Address, ConvertUtil.ExcelEscapeString(f.Formula), GetFormulaValue(v), GetCellType(v, true));
+                                    cache.Append($"<{_nsPrefix}c r=\"{cse.CellAddress}\" s=\"{(styleID < 0 ? 0 : styleID)}\"{GetCellType(v, true)}><{_nsPrefix}f ref=\"{f.Address}\" t=\"array\">{ConvertUtil.ExcelEscapeString(f.Formula)}</{_nsPrefix}f>{GetFormulaValue(v)}</{_nsPrefix}c>");
                                 }
                                 else
                                 {
-                                    cache.AppendFormat("<c r=\"{0}\" s=\"{1}\"{6}><f ref=\"{2}\" t=\"shared\" si=\"{3}\">{4}</f>{5}</c>", cse.CellAddress, styleID < 0 ? 0 : styleID, f.Address, sfId, ConvertUtil.ExcelEscapeString(f.Formula), GetFormulaValue(v), GetCellType(v, true));
+                                    cache.Append($"<{_nsPrefix}c r=\"{cse.CellAddress}\" s=\"{(styleID < 0 ? 0 : styleID)}\"{GetCellType(v, true)}><{_nsPrefix}f ref=\"{f.Address}\" t=\"shared\" si=\"{sfId}\">{ConvertUtil.ExcelEscapeString(f.Formula)}</{_nsPrefix}f>{GetFormulaValue(v)}</{_nsPrefix}c>");
                                 }
 
                             }
                             else if (f.IsArray)
                             {
-                                cache.AppendFormat("<c r=\"{0}\" s=\"{1}\"/>", cse.CellAddress, styleID < 0 ? 0 : styleID);
+                                cache.Append($"<{_nsPrefix}c r=\"{cse.CellAddress}\" s=\"{(styleID < 0 ? 0 : styleID)}\"/>");
                             }
                             else
                             {
-                                cache.AppendFormat("<c r=\"{0}\" s=\"{1}\"{4}><f t=\"shared\" si=\"{2}\"/>{3}</c>", cse.CellAddress, styleID < 0 ? 0 : styleID, sfId, GetFormulaValue(v), GetCellType(v, true));
+                                cache.Append($"<{_nsPrefix}c r=\"{cse.CellAddress}\" s=\"{(styleID < 0 ? 0 : styleID)}\"{GetCellType(v, true)}><{_nsPrefix}f t=\"shared\" si=\"{sfId}\"/>{GetFormulaValue(v)}</{_nsPrefix}c>");
                             }
                         }
                         else
@@ -3690,25 +3711,25 @@ namespace OfficeOpenXml
                             // We can also have a single cell array formula
                             if (f.IsArray)
                             {
-                                cache.AppendFormat("<c r=\"{0}\" s=\"{1}\"{5}><f ref=\"{2}\" t=\"array\">{3}</f>{4}</c>", cse.CellAddress, styleID < 0 ? 0 : styleID, string.Format("{0}:{1}", f.Address, f.Address), ConvertUtil.ExcelEscapeString(f.Formula), GetFormulaValue(v), GetCellType(v, true));
+                                cache.Append($"<{_nsPrefix}c r=\"{cse.CellAddress}\" s=\"{(styleID < 0 ? 0 : styleID)}\"{GetCellType(v, true)}><{_nsPrefix}f ref=\"{f.Address}:{f.Address}\" t=\"array\">{ConvertUtil.ExcelEscapeString(f.Formula)}</{_nsPrefix}f>{GetFormulaValue(v)}</{_nsPrefix}c>");
                             }
                             else
                             {
-                                cache.AppendFormat("<c r=\"{0}\" s=\"{1}\"{2}>", f.Address, styleID < 0 ? 0 : styleID, GetCellType(v, true));
-                                cache.AppendFormat("<f>{0}</f>{1}</c>", ConvertUtil.ExcelEscapeString(f.Formula), GetFormulaValue(v));
+                                cache.Append($"<{_nsPrefix}c r=\"{f.Address}\" s=\"{(styleID < 0 ? 0 : styleID)}\"{GetCellType(v, true)}>");
+                                cache.Append($"<{_nsPrefix}f>{ConvertUtil.ExcelEscapeString(f.Formula)}</{_nsPrefix}f>{GetFormulaValue(v)}</{_nsPrefix}c>");
                             }
                         }
                     }
                     else if (formula != null && formula.ToString() != "")
                     {
-                        cache.AppendFormat("<c r=\"{0}\" s=\"{1}\"{2}>", cse.CellAddress, styleID < 0 ? 0 : styleID, GetCellType(v, true));
-                        cache.AppendFormat("<f>{0}</f>{1}</c>", ConvertUtil.ExcelEscapeString(formula.ToString()), GetFormulaValue(v));
+                        cache.Append($"<{_nsPrefix}c r=\"{cse.CellAddress}\" s=\"{(styleID < 0 ? 0 : styleID)}\"{GetCellType(v, true)}>");
+                        cache.Append($"<{_nsPrefix}f>{ConvertUtil.ExcelEscapeString(formula.ToString())}</{_nsPrefix}f>{GetFormulaValue(v)}</{_nsPrefix}c>");
                     }
                     else
                     {
                         if (v == null && styleID > 0)
                         {
-                            cache.AppendFormat("<c r=\"{0}\" s=\"{1}\"/>", cse.CellAddress, styleID < 0 ? 0 : styleID);
+                            cache.Append($"<{_nsPrefix}c r=\"{cse.CellAddress}\" s=\"{(styleID < 0 ? 0 : styleID)}\"/>");
                         }
                         else if (v != null)
                         {
@@ -3725,8 +3746,8 @@ namespace OfficeOpenXml
                             if ((TypeCompat.IsPrimitive(v) || v is double || v is decimal || v is DateTime || v is TimeSpan))
                             {
                                 //string sv = GetValueForXml(v);
-                                cache.AppendFormat("<c r=\"{0}\" s=\"{1}\"{2}>", cse.CellAddress, styleID < 0 ? 0 : styleID, GetCellType(v));
-                                cache.AppendFormat("{0}</c>", GetFormulaValue(v));
+                                cache.Append($"<{_nsPrefix}c r=\"{cse.CellAddress}\" s=\"{(styleID < 0 ? 0 : styleID)}\"{GetCellType(v)}>");
+                                cache.Append($"{GetFormulaValue(v)}</{_nsPrefix}c>");
                             }
                             else
                             {
@@ -3741,8 +3762,8 @@ namespace OfficeOpenXml
                                 {
                                     ix = ss[vString].pos;
                                 }
-                                cache.AppendFormat("<c r=\"{0}\" s=\"{1}\" t=\"s\">", cse.CellAddress, styleID < 0 ? 0 : styleID);
-                                cache.AppendFormat("<v>{0}</v></c>", ix);
+                                cache.Append($"<{_nsPrefix}c r=\"{cse.CellAddress}\" s=\"{(styleID < 0 ? 0 : styleID)}\" t=\"s\">");
+                                cache.Append($"<{_nsPrefix}v>{ix}</{_nsPrefix}v></{_nsPrefix}c>");
                             }
                         }
                     }
@@ -3767,8 +3788,8 @@ namespace OfficeOpenXml
             }
             columnStyles = null;
 
-            if (row != -1) cache.Append("</row>");
-            cache.Append("</sheetData>");
+            if (row != -1) cache.Append($"</{_nsPrefix}row>");
+            cache.Append($"</{_nsPrefix}sheetData>");
             sw.Write(cache.ToString());
             sw.Flush();
         }
@@ -3856,7 +3877,7 @@ namespace OfficeOpenXml
             //{                    
             if (v != null && v.ToString()!="")
             {
-                return "<v>" + ConvertUtil.ExcelEscapeString(GetValueForXml(v)) + "</v>"; //Fixes issue 15071
+                return $"<{_nsPrefix}v>" + ConvertUtil.ExcelEscapeString(GetValueForXml(v)) + $"</{_nsPrefix}v>"; //Fixes issue 15071
             }            
             else
             {
@@ -3933,9 +3954,9 @@ namespace OfficeOpenXml
         }
         private void WriteRow(StringBuilder cache, ExcelStyleCollection<ExcelXfs> cellXfs, int prevRow, int row)
         {
-            if (prevRow != -1) cache.Append("</row>");
+            if (prevRow != -1) cache.Append($"</{_nsPrefix}row>");
             //ulong rowID = ExcelRow.GetRowID(SheetID, row);
-            cache.AppendFormat("<row r=\"{0}\"", row);
+            cache.Append($"<{_nsPrefix}row r=\"{row}\"");
             RowInternal currRow = GetValueInner(row, 0) as RowInternal;
             if (currRow != null)
             {
@@ -3947,7 +3968,7 @@ namespace OfficeOpenXml
                 }
                 if (currRow.Height >= 0)
                 {
-                    cache.AppendFormat(string.Format(CultureInfo.InvariantCulture, " ht=\"{0}\"", currRow.Height));
+                    cache.Append(string.Format(CultureInfo.InvariantCulture, " ht=\"{0}\"", currRow.Height));
                     if (currRow.CustomHeight)
                     {
                         cache.Append(" customHeight=\"1\"");
@@ -3956,7 +3977,7 @@ namespace OfficeOpenXml
 
                 if (currRow.OutlineLevel > 0)
                 {
-                    cache.AppendFormat(" outlineLevel =\"{0}\"", currRow.OutlineLevel);
+                    cache.Append($" outlineLevel=\"{currRow.OutlineLevel}\"");
                     if (currRow.Collapsed)
                     {
                         if (currRow.Hidden)
@@ -3977,15 +3998,15 @@ namespace OfficeOpenXml
             var s = GetStyleInner(row, 0);
             if (s > 0)
             {
-                cache.AppendFormat(" s=\"{0}\" customFormat=\"1\"", cellXfs[s].newID);
+                cache.Append($" s=\"{cellXfs[s].newID}\" customFormat=\"1\"");
             }
             cache.Append(">");
         }
         private void WriteRow(StreamWriter sw, ExcelStyleCollection<ExcelXfs> cellXfs, int prevRow, int row)
         {
-            if (prevRow != -1) sw.Write("</row>");
+            if (prevRow != -1) sw.Write($"</{_nsPrefix}row>");
             //ulong rowID = ExcelRow.GetRowID(SheetID, row);
-            sw.Write("<row r=\"{0}\"", row);
+            sw.Write($"<{_nsPrefix}row r=\"{row}\"");
             RowInternal currRow = GetValueInner(row, 0) as RowInternal;
             if (currRow!=null)
             {
@@ -4006,7 +4027,7 @@ namespace OfficeOpenXml
 
                 if (currRow.OutlineLevel > 0)
                 {
-                    sw.Write(" outlineLevel =\"{0}\"", currRow.OutlineLevel);
+                    sw.Write($" outlineLevel=\"{currRow.OutlineLevel}\"");
                     if (currRow.Collapsed)
                     {
                         if (currRow.Hidden)
@@ -4027,7 +4048,7 @@ namespace OfficeOpenXml
             var s = GetStyleInner(row, 0);
             if (s > 0)
             {
-                sw.Write(" s=\"{0}\" customFormat=\"1\"", cellXfs[s].newID);
+                sw.Write($" s=\"{cellXfs[s].newID}\" customFormat=\"1\"");
             }
             sw.Write(">");
         }
@@ -4047,7 +4068,7 @@ namespace OfficeOpenXml
                     var uri = _hyperLinks.GetValue(cse.Row, cse.Column);
                     if (first && uri != null)
                     {
-                        sw.Write("<hyperlinks>");
+                        sw.Write($"<{_nsPrefix}hyperlinks>");
                         first = false;
                     }
 
@@ -4056,12 +4077,8 @@ namespace OfficeOpenXml
                     if (uri is ExcelHyperLink && !string.IsNullOrEmpty((uri as ExcelHyperLink).ReferenceAddress))
                     {
                         ExcelHyperLink hl = uri as ExcelHyperLink;
-                        sw.Write("<hyperlink ref=\"{0}\" location=\"{1}\"{2}{3}/>",
-                                Cells[cse.Row, cse.Column, cse.Row + hl.RowSpann, cse.Column + hl.ColSpann].Address, 
-                                ExcelCellBase.GetFullAddress(SecurityElement.Escape(Name), SecurityElement.Escape(hl.ReferenceAddress)),
-                                    string.IsNullOrEmpty(hl.Display) ? "" : " display=\"" + SecurityElement.Escape(hl.Display) + "\"",
-                                    string.IsNullOrEmpty(hl.ToolTip) ? "" : " tooltip=\"" + SecurityElement.Escape(hl.ToolTip) + "\"");
-                    }
+                        sw.Write($"<{_nsPrefix}hyperlink ref=\"{Cells[cse.Row, cse.Column, cse.Row + hl.RowSpann, cse.Column + hl.ColSpann].Address}\" location=\"{ExcelCellBase.GetFullAddress(SecurityElement.Escape(Name), SecurityElement.Escape(hl.ReferenceAddress))}\"{(string.IsNullOrEmpty(hl.Display) ? "" : $" display=\"{SecurityElement.Escape(hl.Display)}\"")}{(string.IsNullOrEmpty(hl.ToolTip) ? "" : $" tooltip=\"{SecurityElement.Escape(hl.ToolTip)}\"")}/>");
+                }
                     else if( uri!=null)
                     {
                         string id;
@@ -4084,13 +4101,11 @@ namespace OfficeOpenXml
                             if (uri is ExcelHyperLink)
                             {
                                 ExcelHyperLink hl = uri as ExcelHyperLink;
-                                sw.Write("<hyperlink ref=\"{0}\"{2}{3} r:id=\"{1}\"/>", ExcelCellBase.GetAddress(cse.Row, cse.Column), relationship.Id,                                
-                                    string.IsNullOrEmpty(hl.Display) ? "" : " display=\"" + SecurityElement.Escape(hl.Display) + "\"",
-                                    string.IsNullOrEmpty(hl.ToolTip) ? "" : " tooltip=\"" + SecurityElement.Escape(hl.ToolTip) + "\"");
+                                sw.Write($"<{_nsPrefix}hyperlink ref=\"{ExcelCellBase.GetAddress(cse.Row, cse.Column)}\"{(string.IsNullOrEmpty(hl.Display) ? "" : $" display=\"{SecurityElement.Escape(hl.Display)}\"")}{(string.IsNullOrEmpty(hl.ToolTip) ? "" : $" tooltip=\"{SecurityElement.Escape(hl.ToolTip)}\"")}" + $" r:id=\"{relationship.Id}\"/>");
                             }
                             else
                             {
-                                sw.Write("<hyperlink ref=\"{0}\" r:id=\"{1}\"/>", ExcelCellBase.GetAddress(cse.Row, cse.Column), relationship.Id);
+                                sw.Write($"<{_nsPrefix}hyperlink ref=\"{ExcelCellBase.GetAddress(cse.Row, cse.Column)}\" r:id=\"{relationship.Id}\"/>");
                             }
                             id = relationship.Id;
                         }
@@ -4099,7 +4114,7 @@ namespace OfficeOpenXml
                 }
                 if (!first)
                 {
-                    sw.Write("</hyperlinks>");
+                    sw.Write($"</{_nsPrefix}hyperlinks>");
                 }
         }
         /// <summary>
