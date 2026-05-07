@@ -2,21 +2,19 @@ name: Test documentation
 
 on:
   pull_request:
-    branches:
-      - master
 
 jobs:
   buildcheck:
     runs-on: windows-latest
     steps:
       - name: Checkout source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Setup .NET Core SDKs
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           global-json-file: global.json
       - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1.1
+        uses: microsoft/setup-msbuild@v3
         with:
           msbuild-architecture: x64
       - name: Install SHFB
