@@ -17,10 +17,15 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: |
-            2.1.x
-            3.1.x
             6.0.x
             8.0.x
+      - name: Setup legacy .NET Core SDKs
+        if: matrix.os != 'ubuntu-latest'
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            2.1.x
+            3.1.x
       - name: Install dependencies
         run: dotnet restore
       - name: Build solution [Debug]

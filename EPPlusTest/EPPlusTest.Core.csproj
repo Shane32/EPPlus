@@ -13,7 +13,10 @@
     <NoWarn>$(NoWarn);NETSDK1023</NoWarn>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' != 'true'">
+  <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">
+    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' != 'true' AND '$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' != 'true'">
     <TargetFrameworks>netcoreapp2.1;netcoreapp3.1;net6.0;net8.0</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">
