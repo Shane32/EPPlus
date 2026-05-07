@@ -2,25 +2,31 @@ name: Test code
 
 on:
   pull_request:
-    branches:
-      - master
 
 jobs:
   test:
     strategy:
       matrix:
-        os: [ubuntu-20.04, windows-latest]
+        os: [ubuntu-latest, windows-latest]
     name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout source
-        uses: actions/checkout@v4
-      - name: Setup .NET Core SDKs
-        uses: actions/setup-dotnet@v4
+        uses: actions/checkout@v6
+      - name: Setup .NET Core SDKs for Windows
+        if: matrix.os == 'windows-latest'
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: |
             2.1.x
             3.1.x
+            6.0.x
+            8.0.x
+      - name: Setup .NET Core SDKs on Linux
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
             6.0.x
             8.0.x
       - name: Install dependencies

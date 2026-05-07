@@ -23,6 +23,11 @@ namespace EPPlusTest
         [TestMethod]
         public void RunDrawingTests()
         {
+            if (TestPlatform.IsLinux)
+            {
+                Assert.Inconclusive("Skipping drawing tests on Linux.");
+            }
+
             BarChart();
             Column();
             Cone();

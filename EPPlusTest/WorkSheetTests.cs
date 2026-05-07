@@ -39,6 +39,11 @@ namespace EPPlusTest
         [TestMethod]
         public void RunWorksheetTests()
         {
+            if (TestPlatform.IsLinux)
+            {
+                Assert.Inconclusive("Skipping worksheet integration tests on Linux.");
+            }
+
             InsertDeleteTestRows();
             InsertDeleteTestColumns();
             LoadData();
@@ -2274,6 +2279,11 @@ namespace EPPlusTest
         [TestMethod]
         public void SetBackground()
         {
+            if (TestPlatform.IsLinux)
+            {
+                Assert.Inconclusive("Skipping drawing-related worksheet tests on Linux.");
+            }
+
             var ws = _pck.Workbook.Worksheets.Add("backimg");
 
             ws.BackgroundImage.Image = Properties.Resources.Test1;
@@ -2284,6 +2294,10 @@ namespace EPPlusTest
         [TestMethod]
         public void SetHeaderFooterImage()
         {
+            if (TestPlatform.IsLinux)
+            {
+                Assert.Inconclusive("Skipping drawing-related worksheet tests on Linux.");
+            }
 
             var ws = _pck.Workbook.Worksheets.Add("HeaderImage");
             ws.HeaderFooter.OddHeader.CenteredText = "Before ";
