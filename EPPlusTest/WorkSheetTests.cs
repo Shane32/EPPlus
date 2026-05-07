@@ -16,6 +16,7 @@ using OfficeOpenXml.Table;
 using System.Threading;
 using System.Globalization;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
 namespace EPPlusTest
 {
@@ -39,6 +40,11 @@ namespace EPPlusTest
         [TestMethod]
         public void RunWorksheetTests()
         {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Assert.Inconclusive("Skipping worksheet integration tests on Linux.");
+            }
+
             InsertDeleteTestRows();
             InsertDeleteTestColumns();
             LoadData();
@@ -2274,6 +2280,11 @@ namespace EPPlusTest
         [TestMethod]
         public void SetBackground()
         {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Assert.Inconclusive("Skipping drawing-related worksheet tests on Linux.");
+            }
+
             var ws = _pck.Workbook.Worksheets.Add("backimg");
 
             ws.BackgroundImage.Image = Properties.Resources.Test1;
@@ -2284,6 +2295,10 @@ namespace EPPlusTest
         [TestMethod]
         public void SetHeaderFooterImage()
         {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Assert.Inconclusive("Skipping drawing-related worksheet tests on Linux.");
+            }
 
             var ws = _pck.Workbook.Worksheets.Add("HeaderImage");
             ws.HeaderFooter.OddHeader.CenteredText = "Before ";
