@@ -13,21 +13,7 @@ namespace EPPlusTest
             get
             {
 #if NETFRAMEWORK
-                if (Environment.OSVersion.Platform != PlatformID.Unix)
-                {
-                    return false;
-                }
-                if (File.Exists("/proc/version"))
-                {
-                    try
-                    {
-                        return File.ReadAllText("/proc/version").IndexOf("linux", StringComparison.OrdinalIgnoreCase) >= 0;
-                    }
-                    catch
-                    {
-                    }
-                }
-                return Environment.OSVersion.VersionString.IndexOf("linux", StringComparison.OrdinalIgnoreCase) >= 0;
+                return Environment.OSVersion.Platform == PlatformID.Unix;
 #else
                 return System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux);
 #endif
