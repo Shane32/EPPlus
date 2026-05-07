@@ -1069,7 +1069,7 @@ namespace OfficeOpenXml
                         }
                     }
                     endMatch = Regex.Match(s, string.Format("(</[^>]*{0}[^>]*>)", "sheetData"));
-                    xml += "<sheetData/>" + s.Substring(endMatch.Index + endMatch.Length, s.Length - (endMatch.Index + endMatch.Length));
+                    xml += startmMatch.Value.Substring(0, startmMatch.Value.Length - 1) + "/>" + s.Substring(endMatch.Index + endMatch.Length, s.Length - (endMatch.Index + endMatch.Length));
                 }
                 if (sr.Peek() > -1)
                 {
