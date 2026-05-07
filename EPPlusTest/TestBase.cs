@@ -6,6 +6,11 @@ using System.Reflection;
 
 namespace EPPlusTest
 {
+    internal static class TestPlatform
+    {
+        internal static bool IsLinux => Environment.OSVersion.Platform == PlatformID.Unix && Directory.Exists("/proc");
+    }
+
     [TestClass]
     public abstract class TestBase
     {
