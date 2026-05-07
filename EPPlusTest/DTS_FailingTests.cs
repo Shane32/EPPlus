@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Runtime.InteropServices;
 
 namespace EPPlusTest
 {
@@ -16,7 +15,7 @@ namespace EPPlusTest
         [TestMethod]
         public void DeleteWorksheetWithReferencedImage()
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
                 Assert.Inconclusive("Skipping image worksheet tests on Linux.");
             }
@@ -42,7 +41,7 @@ namespace EPPlusTest
         [TestMethod]
         public void CopyAndDeleteWorksheetWithImage()
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
                 Assert.Inconclusive("Skipping image worksheet tests on Linux.");
             }

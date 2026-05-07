@@ -16,7 +16,6 @@ using OfficeOpenXml.Table;
 using System.Threading;
 using System.Globalization;
 using System.Threading.Tasks;
-using System.Runtime.InteropServices;
 
 namespace EPPlusTest
 {
@@ -40,7 +39,7 @@ namespace EPPlusTest
         [TestMethod]
         public void RunWorksheetTests()
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
                 Assert.Inconclusive("Skipping worksheet integration tests on Linux.");
             }
@@ -2280,7 +2279,7 @@ namespace EPPlusTest
         [TestMethod]
         public void SetBackground()
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
                 Assert.Inconclusive("Skipping drawing-related worksheet tests on Linux.");
             }
@@ -2295,7 +2294,7 @@ namespace EPPlusTest
         [TestMethod]
         public void SetHeaderFooterImage()
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
                 Assert.Inconclusive("Skipping drawing-related worksheet tests on Linux.");
             }

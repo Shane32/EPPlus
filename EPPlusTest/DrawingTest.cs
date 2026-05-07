@@ -10,7 +10,6 @@ using OfficeOpenXml.Drawing.Chart;
 using OfficeOpenXml.Style;
 using System.Diagnostics;
 using System.Reflection;
-using System.Runtime.InteropServices;
 
 namespace EPPlusTest
 {
@@ -24,7 +23,7 @@ namespace EPPlusTest
         [TestMethod]
         public void RunDrawingTests()
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
                 Assert.Inconclusive("Skipping drawing tests on Linux.");
             }
