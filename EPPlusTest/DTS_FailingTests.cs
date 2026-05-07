@@ -15,7 +15,7 @@ namespace EPPlusTest
         [TestMethod]
         public void DeleteWorksheetWithReferencedImage()
         {
-            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            if (Environment.OSVersion.Platform == PlatformID.Unix && Directory.Exists("/proc"))
             {
                 Assert.Inconclusive("Skipping image worksheet tests on Linux.");
             }
@@ -41,7 +41,7 @@ namespace EPPlusTest
         [TestMethod]
         public void CopyAndDeleteWorksheetWithImage()
         {
-            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            if (Environment.OSVersion.Platform == PlatformID.Unix && Directory.Exists("/proc"))
             {
                 Assert.Inconclusive("Skipping image worksheet tests on Linux.");
             }

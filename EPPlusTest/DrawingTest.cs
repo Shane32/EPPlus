@@ -23,7 +23,7 @@ namespace EPPlusTest
         [TestMethod]
         public void RunDrawingTests()
         {
-            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            if (Environment.OSVersion.Platform == PlatformID.Unix && Directory.Exists("/proc"))
             {
                 Assert.Inconclusive("Skipping drawing tests on Linux.");
             }

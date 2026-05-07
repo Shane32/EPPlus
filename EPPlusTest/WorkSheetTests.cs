@@ -39,7 +39,7 @@ namespace EPPlusTest
         [TestMethod]
         public void RunWorksheetTests()
         {
-            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            if (Environment.OSVersion.Platform == PlatformID.Unix && Directory.Exists("/proc"))
             {
                 Assert.Inconclusive("Skipping worksheet integration tests on Linux.");
             }
@@ -2279,7 +2279,7 @@ namespace EPPlusTest
         [TestMethod]
         public void SetBackground()
         {
-            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            if (Environment.OSVersion.Platform == PlatformID.Unix && Directory.Exists("/proc"))
             {
                 Assert.Inconclusive("Skipping drawing-related worksheet tests on Linux.");
             }
@@ -2294,7 +2294,7 @@ namespace EPPlusTest
         [TestMethod]
         public void SetHeaderFooterImage()
         {
-            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            if (Environment.OSVersion.Platform == PlatformID.Unix && Directory.Exists("/proc"))
             {
                 Assert.Inconclusive("Skipping drawing-related worksheet tests on Linux.");
             }
