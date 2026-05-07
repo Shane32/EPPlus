@@ -3,6 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OfficeOpenXml;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace EPPlusTest
 {
@@ -13,12 +15,23 @@ namespace EPPlusTest
             get
             {
 #if NETFRAMEWORK
-                return Environment.OSVersion.Platform == PlatformID.Unix;
+                return Environment.OSVersion.Platform == PlatformID.Unix && GetUnixKernelName().Equals("Linux", StringComparison.OrdinalIgnoreCase);
 #else
                 return System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux);
 #endif
             }
         }
+
+#if NETFRAMEWORK
+        [DllImport("libc")]
+        private static extern int uname(StringBuilder buffer);
+
+        private static string GetUnixKernelName()
+        {
+            var buffer = new StringBuilder(256);
+            return uname(buffer) == 0 ? buffer.ToString() : string.Empty;
+        }
+#endif
     }
 
     [TestClass]
