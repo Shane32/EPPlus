@@ -96,14 +96,15 @@ namespace OfficeOpenXml.Packaging
             {
                 var rels = new Dictionary<string, string>();
                 stream.Seek(0, SeekOrigin.Begin);                
-                using (ZipInputStream zip = new ZipInputStream(stream))
+                using (stream)
+                using (ZipFile zip = ReadZipFile(stream))
                 {
-                    var e = zip.GetNextEntry();
-                    if(e==null)
+                    var firstEntry = zip.Entries.FirstOrDefault();
+                    if (firstEntry == null)
                     {
                         throw (new InvalidDataException("The file is not an valid Package file. If the file is encrypted, please supply the password in the constructor."));
                     }
-                    if (e.FileName.Contains("\\"))
+                    if (firstEntry.FileName.Contains("\\"))
                     {
                         _dirSeparator = '\\';
                     }
@@ -111,12 +112,15 @@ namespace OfficeOpenXml.Packaging
                     {
                         _dirSeparator = '/';
                     }
-                    while (e != null)
+                    foreach (var e in zip)
                     {
                         if (e.UncompressedSize > 0)
                         {
                             var b = new byte[e.UncompressedSize];
-                            var size = zip.Read(b, 0, (int)e.UncompressedSize);
+                            using (var entryStream = new MemoryStream(b))
+                            {
+                                e.Extract(entryStream);
+                            }
                             if (e.FileName.Equals("[content_types].xml", StringComparison.OrdinalIgnoreCase))
                             {
                                 AddContentTypes(Encoding.UTF8.GetString(b));
@@ -141,10 +145,6 @@ namespace OfficeOpenXml.Packaging
                                 }
                             }
                         }
-                        else
-                        {
-                        }
-                        e = zip.GetNextEntry();
                     }
 
                     foreach (var p in Parts)
@@ -169,13 +169,19 @@ namespace OfficeOpenXml.Packaging
                     {
                         throw (new InvalidDataException("The file is not an valid Package file. If the file is encrypted, please supply the password in the constructor."));
                     }
-                    if (!hasContentTypeXml)
-                    {
-                        throw (new InvalidDataException("The file is not an valid Package file. If the file is encrypted, please supply the password in the constructor."));
-                    }
-                    zip.Close();
-                    zip.Dispose();
                 }
+            }
+        }
+
+        private static ZipFile ReadZipFile(Stream stream)
+        {
+            try
+            {
+                return ZipFile.Read(stream);
+            }
+            catch (ZipException ex)
+            {
+                throw new InvalidDataException("The file is not an valid Package file. If the file is encrypted, please supply the password in the constructor.", ex);
             }
         }
 
