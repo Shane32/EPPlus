@@ -34,6 +34,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Update="Workbooks\test-zip64-descriptor.xlsx" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\BitmapImage.gif" />
     <None Remove="Resources\Test1.jpg" />
     <None Remove="Resources\Vector Drawing.wmf" />
